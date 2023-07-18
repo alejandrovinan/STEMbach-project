@@ -1,7 +1,7 @@
 import {config, appFetch, setServiceToken, getServiceToken, removeServiceToken, setReauthenticationCallback} from './appFetch';
 
-export const login = (userName, password, onSuccess, onErrors, reauthenticationCallback) =>
-    appFetch('/users/login', config('POST', {userName, password}),
+export const login = (email, password, roleType, onSuccess, onErrors, reauthenticationCallback) =>
+    appFetch('/users/login', config('POST', {email, password, roleType}),
         authenticatedUser => {
             setServiceToken(authenticatedUser.serviceToken);
             setReauthenticationCallback(reauthenticationCallback);
@@ -27,13 +27,11 @@ export const tryLoginFromServiceToken = (onSuccess, reauthenticationCallback) =>
 
 }
 
-export const signUp = (user, onSuccess, onErrors, reauthenticationCallback) => {
+export const signUp = (user, onSuccess, onErrors) => {
 
-    appFetch('/users/signUp', config('POST', user), 
-        authenticatedUser => {
-            setServiceToken(authenticatedUser.serviceToken);
-            setReauthenticationCallback(reauthenticationCallback);
-            onSuccess(authenticatedUser);
+    appFetch('/users/createAccount', config('POST', user),
+        newUser => {
+            onSuccess(newUser);
         }, 
         onErrors);
 
@@ -50,3 +48,9 @@ export const changePassword = (id, oldPassword, newPassword, onSuccess,
     appFetch(`/users/${id}/changePassword`, 
         config('POST', {oldPassword, newPassword}),
         onSuccess, onErrors);
+
+export const findAllFaculties = (onSuccess) =>
+    appFetch('/users/faculties', config('GET'), onSuccess);
+
+export const findAllSchools = (onSuccess) =>
+    appFetch('/users/schools', config('GET'), onSuccess);

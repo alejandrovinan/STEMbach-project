@@ -7,6 +7,6 @@ public interface PermissionChecker {
 	
 	void checkUserExists(Long userId) throws InstanceNotFoundException;
 	
-	User checkUser(Long userId) throws InstanceNotFoundException;
+	User checkUser(Long userId, User.RoleType roleType) throws InstanceNotFoundException;
 	
 }

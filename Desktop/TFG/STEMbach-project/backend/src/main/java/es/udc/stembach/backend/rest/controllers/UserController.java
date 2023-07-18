@@ -6,10 +6,7 @@ import es.udc.stembach.backend.model.services.UserService;
 import es.udc.stembach.backend.rest.common.ErrorsDto;
 import es.udc.stembach.backend.rest.common.JwtGenerator;
 import es.udc.stembach.backend.rest.common.JwtInfo;
-import es.udc.stembach.backend.rest.dtos.AuthenticatedUserDto;
-import es.udc.stembach.backend.rest.dtos.ChangePasswordParamsDto;
-import es.udc.stembach.backend.rest.dtos.LoginParamsDto;
-import es.udc.stembach.backend.rest.dtos.UserDto;
+import es.udc.stembach.backend.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -19,8 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Locale;
 
+import static es.udc.stembach.backend.rest.dtos.FacultyConversor.toFacultyDtos;
+import static es.udc.stembach.backend.rest.dtos.SchoolConversor.toSchoolDtos;
 import static es.udc.stembach.backend.rest.dtos.UserConversor.*;
 
 @RestController
@@ -29,6 +29,8 @@ public class UserController {
 	
 	private final static String INCORRECT_LOGIN_EXCEPTION_CODE = "project.exceptions.IncorrectLoginException";
 	private final static String INCORRECT_PASSWORD_EXCEPTION_CODE = "project.exceptions.IncorrectPasswordException";
+	private final static String FACULTY_NOT_FOUND_EXCEPTION_CODE= "project.exceptions.FacultyNotFoundException";
+	private final static String SCHOOL_NOT_FOUND_EXCEPTION_CODE= "project.exceptions.SchoolNotFoundException";
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -63,13 +65,41 @@ public class UserController {
 		
 	}
 
-	@PostMapping("/signUp")
-	public ResponseEntity<AuthenticatedUserDto> signUp(
-		@Validated({UserDto.AllValidations.class}) @RequestBody UserDto userDto) throws DuplicateInstanceException {
-		
-		User user = toUser(userDto);
-		
-		userService.signUp(user);
+	@ExceptionHandler(FacultyNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	public ErrorsDto handleFacultyNotFoundException(FacultyNotFoundException exception, Locale locale){
+		String errorsMessage = messageSource.getMessage(FACULTY_NOT_FOUND_EXCEPTION_CODE, null, FACULTY_NOT_FOUND_EXCEPTION_CODE, locale);
+
+		return new ErrorsDto(errorsMessage);
+	}
+
+	@ExceptionHandler(SchoolNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	public ErrorsDto handleSchoolNotFoundException(SchoolNotFoundException exception, Locale locale){
+		String errorsMessage = messageSource.getMessage(SCHOOL_NOT_FOUND_EXCEPTION_CODE, null, SCHOOL_NOT_FOUND_EXCEPTION_CODE, locale);
+
+		return new ErrorsDto(errorsMessage);
+	}
+
+	@PostMapping("/createAccount")
+	public ResponseEntity<AuthenticatedUserDto> createAccount(@RequestAttribute Long userId,
+															  @Validated({UserDto.AllValidations.class})
+															  @RequestBody UserDto userDto)
+			throws DuplicateInstanceException, FacultyNotFoundException, SchoolNotFoundException {
+
+		User user = new User();
+		switch (userDto.getRole()){
+			case "UDCTEACHER":
+				user = toUDCTeacher(userDto);
+				break;
+			case "CENTERSTEMCOORDINATOR":
+				user = toCenterSTEMCoordinator(userDto);
+				break;
+		}
+
+		userService.createAccount(user, userDto.getFacultyId(), userDto.getSchoolId(), userId);
 		
 		URI location = ServletUriComponentsBuilder
 			.fromCurrentRequest().path("/{id}")
@@ -82,40 +112,27 @@ public class UserController {
 	@PostMapping("/login")
 	public AuthenticatedUserDto login(@Validated @RequestBody LoginParamsDto params)
 		throws IncorrectLoginException {
-		
-		User user = userService.login(params.getUserName(), params.getPassword());
+		User user = userService.login(params.getEmail(), params.getPassword(), params.getRoleType());
 			
 		return toAuthenticatedUserDto(generateServiceToken(user), user);
 		
 	}
 	
 	@PostMapping("/loginFromServiceToken")
-	public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId, 
+	public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId, @RequestAttribute User.RoleType role,
 		@RequestAttribute String serviceToken) throws InstanceNotFoundException {
 		
-		User user = userService.loginFromId(userId);
+		User user = userService.loginFromId(userId, role);
 		
 		return toAuthenticatedUserDto(serviceToken, user);
 		
 	}
 
-	@PutMapping("/{id}")
-	public UserDto updateProfile(@RequestAttribute Long userId, @PathVariable Long id,
-		@Validated({UserDto.UpdateValidations.class}) @RequestBody UserDto userDto) 
-		throws InstanceNotFoundException, PermissionException {
-				
-		if (!id.equals(userId)) {
-			throw new PermissionException();
-		}
-		
-		return toUserDto(userService.updateProfile(id, userDto.getFirstName(), userDto.getLastName(),
-			userDto.getEmail()));
-		
-	}
-	
+
+
 	@PostMapping("/{id}/changePassword")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void changePassword(@RequestAttribute Long userId, @PathVariable Long id,
+	public void changePassword(@RequestAttribute Long userId, @RequestAttribute User.RoleType role, @PathVariable Long id,
 		@Validated @RequestBody ChangePasswordParamsDto params)
 		throws PermissionException, InstanceNotFoundException, IncorrectPasswordException {
 		
@@ -123,16 +140,26 @@ public class UserController {
 			throw new PermissionException();
 		}
 		
-		userService.changePassword(id, params.getOldPassword(), params.getNewPassword());
+		userService.changePassword(id, role, params.getOldPassword(), params.getNewPassword());
 		
 	}
 	
 	private String generateServiceToken(User user) {
 		
-		JwtInfo jwtInfo = new JwtInfo(user.getId(), user.getUserName(), user.getRole().toString());
+		JwtInfo jwtInfo = new JwtInfo(user.getId(), user.getName(), user.getRole().toString());
 		
 		return jwtGenerator.generate(jwtInfo);
 		
+	}
+
+	@GetMapping("/faculties")
+	public List<FacultyDto> findAllFaculties(){
+		return toFacultyDtos(userService.findAllFaculties());
+	}
+
+	@GetMapping("/schools")
+	public List<SchoolDto> findAllSchools(){
+		return toSchoolDtos(userService.findAllSchool());
 	}
 	
 }

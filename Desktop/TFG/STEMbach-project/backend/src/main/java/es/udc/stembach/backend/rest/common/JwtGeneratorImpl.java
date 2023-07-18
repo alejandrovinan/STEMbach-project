@@ -1,13 +1,12 @@
 package es.udc.stembach.backend.rest.common;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class JwtGeneratorImpl implements JwtGenerator {
@@ -23,7 +22,7 @@ public class JwtGeneratorImpl implements JwtGenerator {
 
 		return Jwts.builder()
 			.claim("userId", info.getUserId())
-			.claim("role", info.getRole())
+			.claim("role", info.getRole().toString())
 			.setExpiration(new Date(System.currentTimeMillis() + expirationMinutes*60*1000))
 			.signWith(SignatureAlgorithm.HS512, signKey.getBytes())
 			.compact();
@@ -39,8 +38,8 @@ public class JwtGeneratorImpl implements JwtGenerator {
 	        .getBody();
 		
 		return new JwtInfo(
-			((Integer) claims.get("userId")).longValue(), 
-			claims.getSubject(), 
+			((Integer) claims.get("userId")).longValue(),
+			claims.getSubject(),
 			(String) claims.get("role"));
 		
 	}

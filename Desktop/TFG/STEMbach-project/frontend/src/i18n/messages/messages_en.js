@@ -1,10 +1,10 @@
 // eslint-disable-next-line
 export default {
 
-    'project.app.Footer.text': 'PA Project - Area of Telematics Engineering - University of A Coruña',
+    'project.app.Footer.text': 'STEMBach project - Web created by Alejandro Viñán Bértoa',
     'project.app.Header.home': 'Home',
     'project.app.Header.logout': 'Logout',
-    'project.app.Home.welcome': 'MiniPortal main page content!',
+    'project.app.Home.welcome': 'Welcom to the STEMBach project main page',
 
     'project.common.ErrorDialog.title': 'Error',
 
@@ -21,6 +21,11 @@ export default {
     'project.global.fields.lastName': 'Last name',
     'project.global.fields.name': 'Name',
     'project.global.fields.password': 'Password',
+    'project.global.fields.role': 'Role',
+    'project.global.fields.role.select': 'Choose a role',
+    'project.global.fields.dni': 'ID',
+    'project.global.fields.faculty': 'Faculty',
+    'project.global.fields.schools': 'School centers',
     'project.global.fields.postalAddress': 'Postal address',
     'project.global.fields.postalCode': 'Postal code',
     'project.global.fields.userName': 'Username',
@@ -34,7 +39,14 @@ export default {
     'project.users.ChangePassword.title': 'Change password',
     'project.users.Login.title': 'Login',
     'project.users.SignUp.fields.confirmPassword': 'Confirm password',
-    'project.users.SignUp.title': 'Sign up',
-    'project.users.UpdateProfile.title': 'Update profile'
+    'project.users.CreateAccount.title': 'Create accounts',
+    'project.users.UpdateProfile.title': 'Update profile',
+    'project.user.accounts.title': 'User accounts',
+    'project.user.accounts.createAccountsButton': 'Create accounts',
+
+    'project.users.login.roles.stemcoordinator': 'STEMBACH Coordinator',
+    'project.users.login.roles.udcteacher': 'UDC teacher',
+    'project.users.login.roles.centerstemcoordinator': 'Center STEMBACH Coordinator'
+
 
 }

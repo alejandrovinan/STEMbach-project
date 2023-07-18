@@ -6,8 +6,12 @@ export const getUser = state =>
 export const isLoggedIn = state =>
     getUser(state) !== null
 
-export const getUserName = state => 
-    isLoggedIn(state) ? getUser(state).userName : null;
+export const getEmail = state =>
+    isLoggedIn(state) ? getUser(state).email : null;
+
+export const getFaculties = state => getModuleState(state).faculties;
+
+export const getSchools = state => getModuleState(state).schools;
 
 
 

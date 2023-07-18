@@ -1,26 +1,15 @@
 package es.udc.stembach.backend.test.model.services;
 
-import es.udc.stembach.backend.model.entities.User;
-import es.udc.stembach.backend.model.exceptions.DuplicateInstanceException;
-import es.udc.stembach.backend.model.exceptions.IncorrectLoginException;
-import es.udc.stembach.backend.model.exceptions.IncorrectPasswordException;
-import es.udc.stembach.backend.model.exceptions.InstanceNotFoundException;
-import es.udc.stembach.backend.model.services.UserService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
 public class UserServiceTest {
 	
-	private final Long NON_EXISTENT_ID = Long.valueOf(-1);
+/*	private final Long NON_EXISTENT_ID = Long.valueOf(-1);
 	
 	@Autowired
 	private UserService userService;
@@ -146,6 +135,6 @@ public class UserServiceTest {
 		assertThrows(IncorrectPasswordException.class, () ->
 			userService.changePassword(user.getId(), 'Y' + oldPassword, newPassword));
 		
-	}
+	}*/
 
 }

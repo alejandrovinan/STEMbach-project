@@ -1,10 +1,10 @@
 // eslint-disable-next-line
 export default {
 
-    'project.app.Footer.text': 'PA Project - Area de Ingeniería Telemática - Universidad de A Coruña',
+    'project.app.Footer.text': 'Proyecto STEMBach - Página web creada por Alejandro Viñán Bértoa',
     'project.app.Header.home': 'Inicio',
     'project.app.Header.logout': 'Salir',
-    'project.app.Home.welcome': '¡Contenido de la página principal de PA Project!',
+    'project.app.Home.welcome': 'Bienvenido a la página principal del proyecto STEMBach',
     
     'project.common.ErrorDialog.title': 'Error',
 
@@ -21,6 +21,11 @@ export default {
     'project.global.fields.lastName': 'Apellidos',
     'project.global.fields.name': 'Nombre',
     'project.global.fields.password': 'Contraseña',
+    'project.global.fields.role': 'Rol',
+    'project.global.fields.role.select': 'Selecciona un rol',
+    'project.global.fields.dni': 'DNI',
+    'project.global.fields.faculty': 'Facultad',
+    'project.global.fields.schools': 'Centros',
     'project.global.fields.postalAddress': 'Dirección postal',
     'project.global.fields.postalCode': 'Código postal',
     'project.global.fields.userName': 'Usuario',
@@ -34,7 +39,13 @@ export default {
     'project.users.ChangePassword.title': 'Cambiar contraseña',
     'project.users.Login.title': 'Autenticarse',
     'project.users.SignUp.fields.confirmPassword': 'Confirmar contraseña',
-    'project.users.SignUp.title': 'Registrarse',
-    'project.users.UpdateProfile.title': 'Actualizar perfil'
+    'project.users.CreateAccount.title': 'Crear cuenta',
+    'project.users.UpdateProfile.title': 'Actualizar perfil',
+    'project.user.accounts.title': 'Cuentas de usuario',
+    'project.user.accounts.createAccountsButton': 'Crear cuenta',
+
+    'project.users.login.roles.stemcoordinator': 'Coordinador STEMBACH',
+    'project.users.login.roles.udcteacher': 'Profesor UDC',
+    'project.users.login.roles.centerstemcoordinator': 'Coordinador STEMBACH en centro'
 
 }

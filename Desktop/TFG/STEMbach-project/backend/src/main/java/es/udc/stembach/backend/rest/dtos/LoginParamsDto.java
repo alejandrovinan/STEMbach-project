@@ -1,21 +1,24 @@
 package es.udc.stembach.backend.rest.dtos;
 
+import es.udc.stembach.backend.model.entities.User;
+
 import javax.validation.constraints.NotNull;
 
 public class LoginParamsDto {
 	
-	private String userName;
+	private String email;
 	private String password;
+	private User.RoleType roleType;
 	
 	public LoginParamsDto() {}
 
 	@NotNull
-	public String getUserName() {
-		return userName;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName.trim();
+	public void setEmail(String email) {
+		this.email = email.trim();
 	}
 
 	@NotNull
@@ -27,4 +30,12 @@ public class LoginParamsDto {
 		this.password = password;
 	}
 
+	@NotNull
+	public User.RoleType getRoleType() {
+		return roleType;
+	}
+
+	public void setRoleType(User.RoleType roleType) {
+		this.roleType = roleType;
+	}
 }

@@ -6,12 +6,12 @@ import users from '../../users';
 
 const Header = () => {
 
-    const userName = useSelector(users.selectors.getUserName);
+    const userName = useSelector(users.selectors.getEmail);
 
     return (
 
         <nav className="navbar navbar-expand-lg navbar-light bg-light border">
-            <Link className="navbar-brand" to="/">PA Project</Link>
+            <Link className="navbar-brand" to="/">STEMBach</Link>
             <button className="navbar-toggler" type="button" 
                 data-toggle="collapse" data-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" 
@@ -36,9 +36,6 @@ const Header = () => {
                             {userName}
                         </a>
                         <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="/users/update-profile">
-                                <FormattedMessage id="project.users.UpdateProfile.title"/>
-                            </Link>
                             <Link className="dropdown-item" to="/users/change-password">
                                 <FormattedMessage id="project.users.ChangePassword.title"/>
                             </Link>

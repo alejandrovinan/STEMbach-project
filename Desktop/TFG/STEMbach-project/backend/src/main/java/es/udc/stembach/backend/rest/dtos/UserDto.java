@@ -11,23 +11,48 @@ public class UserDto {
 	public interface UpdateValidations {}
 
 	private Long id;
-	private String userName;
+	private String name;
 	private String password;
-	private String firstName;
-	private String lastName;
+	private String surname;
+	private String secondSurname;
 	private String email;
 	private String role;
+	private String dni;
+	private Long facultyId;
+	private Long schoolId;
 
 	public UserDto() {}
 
-	public UserDto(Long id, String userName, String firstName, String lastName, String email, String role) {
-
-		this.id = id;
-		this.userName = userName != null ? userName.trim() : null;
-		this.firstName = firstName.trim();
-		this.lastName = lastName.trim();
+	public UserDto(String name, String password, String surname, String secondSurname, String email, String role, String dni, Long facultyId, Long schoolId) {
+		this.name = name != null ? name.trim() : null;
+		this.surname = surname.trim();
+		this.secondSurname = secondSurname.trim();
 		this.email = email.trim();
 		this.role = role;
+		this.dni = dni != null ? dni.trim() : null;
+		this.facultyId = facultyId != null ? facultyId : null;
+		this.schoolId = schoolId != null ? schoolId : null;
+	}
+
+	public UserDto(Long id, String name, String surname, String secondSurname, String role) {
+		this.id = id;
+		this.name = name != null ? name.trim() : null;
+		this.surname = surname.trim();
+		this.secondSurname = secondSurname.trim();
+		this.role = role;
+	}
+
+	public UserDto(Long id, String name, String surname, String secondSurname, String email, String role, String dni, Long facultyId, Long schoolId) {
+
+		this.id = id;
+		this.name = name != null ? name.trim() : null;
+		this.surname = surname.trim();
+		this.secondSurname = secondSurname.trim();
+		this.email = email.trim();
+		this.role = role;
+		this.dni = dni != null ? dni.trim() : null;
+		this.facultyId = facultyId != null ? facultyId : null;
+		this.schoolId = schoolId != null ? schoolId : null;
 		
 	}
 
@@ -41,12 +66,12 @@ public class UserDto {
 
 	@NotNull(groups={AllValidations.class})
 	@Size(min=1, max=60, groups={AllValidations.class})
-	public String getUserName() {
-		return userName;
+	public String getName() {
+		return name;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName.trim();
+	public void setName(String userName) {
+		this.name = userName.trim();
 	}
 
 	@NotNull(groups={AllValidations.class})
@@ -61,22 +86,22 @@ public class UserDto {
 
 	@NotNull(groups={AllValidations.class, UpdateValidations.class})
 	@Size(min=1, max=60, groups={AllValidations.class, UpdateValidations.class})
-	public String getFirstName() {
-		return firstName;
+	public String getSurname() {
+		return surname;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName.trim();
+	public void setSurname(String firstName) {
+		this.surname = firstName.trim();
 	}
 
 	@NotNull(groups={AllValidations.class, UpdateValidations.class})
-	@Size(min=1, max=60, groups={AllValidations.class, UpdateValidations.class})
-	public String getLastName() {
-		return lastName;
+	@Size(max=60, groups={AllValidations.class, UpdateValidations.class})
+	public String getSecondSurname() {
+		return secondSurname;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName.trim();
+	public void setSecondSurname(String lastName) {
+		this.secondSurname = lastName.trim();
 	}
 
 	@NotNull(groups={AllValidations.class, UpdateValidations.class})
@@ -98,4 +123,27 @@ public class UserDto {
 		this.role = role;
 	}
 
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public Long getFacultyId() {
+		return facultyId;
+	}
+
+	public void setFaculty(Long facultyId) {
+		this.facultyId = facultyId;
+	}
+
+	public Long getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(Long schoolId) {
+		this.schoolId = schoolId;
+	}
 }

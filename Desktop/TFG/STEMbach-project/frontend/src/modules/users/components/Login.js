@@ -13,6 +13,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('STEMCOORDINATOR');
     const [backendErrors, setBackendErrors] = useState(null);
     let form;
 
@@ -25,6 +26,7 @@ const Login = () => {
             dispatch(actions.login(
                 userName.trim(),
                 password,
+                role,
                 () => navigate('/'),
                 errors => setBackendErrors(errors),
                 () => {
@@ -83,6 +85,18 @@ const Login = () => {
                                 <div className="invalid-feedback">
                                     <FormattedMessage id='project.global.validator.required'/>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label htmlFor="password" className="col-md-3 col-form-label">
+                                <FormattedMessage id="project.global.fields.role"/>
+                            </label>
+                            <div className="col-md-4">
+                                <select name="roles" id="roleSelector" className="form-control" onChange={e => setRole(e.target.value)} value={role}>
+                                    <option value="STEMCOORDINATOR"><FormattedMessage id="project.users.login.roles.stemcoordinator"/></option>
+                                    <option value="UDCTEACHER"><FormattedMessage id="project.users.login.roles.udcteacher"/></option>
+                                    <option value="CENTERSTEMCOORDINATOR"><FormattedMessage id="project.users.login.roles.centerstemcoordinator"/></option>
+                                </select>
                             </div>
                         </div>
                         <div className="form-group row">

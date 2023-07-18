@@ -28,11 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.addFilter(new JwtFilter(authenticationManager(), jwtGenerator))
 			.authorizeRequests()
-			.antMatchers(HttpMethod.POST, "/users/signUp").permitAll()
+			.antMatchers(HttpMethod.POST, "/users/createAccount").hasRole("STEMCOORDINATOR")
+				.antMatchers(HttpMethod.PUT, "/users/*").hasRole("STEMCOORDINATOR")
 			.antMatchers(HttpMethod.POST, "/users/login").permitAll()
 			.antMatchers(HttpMethod.POST, "/users/loginFromServiceToken").permitAll()
-			.antMatchers(HttpMethod.PUT, "/users/*").hasRole("USER")
-			.antMatchers(HttpMethod.POST, "/users/*/changePassword").hasRole("USER")
+			.antMatchers(HttpMethod.GET, "/users/faculties").permitAll()
+			.antMatchers(HttpMethod.GET, "/users/schools").permitAll()
+			.antMatchers(HttpMethod.POST, "/users/*/changePassword").hasAnyRole("STEMCOORDINATOR","UDCTEACHER", "CENTERSTEMCOORDINATOR")
 			.anyRequest().denyAll();
 
 	}
