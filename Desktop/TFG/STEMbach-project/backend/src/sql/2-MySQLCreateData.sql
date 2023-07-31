@@ -16,3 +16,6 @@ INSERT INTO centerstemcoordinator (name, surname, secondSurname, role, email, pa
 
 INSERT INTO school (name, location)
     VALUES ('Manuel Murguía', 'Arteixo, Acoruña');
+
+INSERT INTO biennium (dateRange)
+    VALUES ('2021-2023');

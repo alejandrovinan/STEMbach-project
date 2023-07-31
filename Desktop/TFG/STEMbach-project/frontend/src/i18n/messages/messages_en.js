@@ -32,6 +32,7 @@ export default {
     'project.global.validator.email': 'Provide a correct e-mail address',
     'project.global.validator.passwordsDoNotMatch': 'Passwords do not match',
     'project.global.validator.required': 'Required field',
+    'project.global.validator.invalidUrl': 'Invalid URL',
 
     'project.users.ChangePassword.fields.confirmNewPassword': 'Confirm new password',
     'project.users.ChangePassword.fields.newPassword': 'New password',
@@ -46,7 +47,28 @@ export default {
 
     'project.users.login.roles.stemcoordinator': 'STEMBACH Coordinator',
     'project.users.login.roles.udcteacher': 'UDC teacher',
-    'project.users.login.roles.centerstemcoordinator': 'Center STEMBACH Coordinator'
+    'project.users.login.roles.centerstemcoordinator': 'Center STEMBACH Coordinator',
+
+    'project.projects.CreateProject.title': 'Create a new project',
+    'project.projects.form.title': 'Title',
+    'project.projects.form.description': 'Description',
+    'project.projects.form.observations': 'Observations',
+    'project.projects.form.modality': 'Modality',
+    'project.projects.form.modalitySelector.void': 'Choose modality...',
+    'project.projects.form.modalitySelector.inPerson': 'In person',
+    'project.projects.form.modalitySelector.distance': 'Remote',
+    'project.projects.form.modalitySelector.inPerson_distance': 'Remote & in person',
+    'project.projects.form.url': 'Project URL',
+    'project.projects.form.offerZone': 'Offer zone',
+    'project.projects.form.offerZoneSelector.void': 'Choose a zone to offer...',
+    'project.projects.form.offerZoneSelector.cor': 'A Coruña',
+    'project.projects.form.offerZoneSelector.ferr': 'Ferrol',
+    'project.projects.form.offerZoneSelector.gal': 'Galicia',
+    'project.projects.form.maxGroups': 'Number of groups allowed',
+    'project.projects.form.studentsPerGroup': 'Students per group allowed',
+    'project.projects.form.biennium': 'Biennium',
+    'project.projects.form.teachers': 'Teachers in charge',
+    'project.projects.form.submit': 'Create project'
 
 
 }

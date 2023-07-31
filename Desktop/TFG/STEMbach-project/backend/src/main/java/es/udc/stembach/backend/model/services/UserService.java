@@ -2,6 +2,7 @@ package es.udc.stembach.backend.model.services;
 
 import es.udc.stembach.backend.model.entities.Faculty;
 import es.udc.stembach.backend.model.entities.School;
+import es.udc.stembach.backend.model.entities.UDCTeacher;
 import es.udc.stembach.backend.model.entities.User;
 import es.udc.stembach.backend.model.exceptions.*;
 
@@ -22,5 +23,7 @@ public interface UserService {
 	List<Faculty> findAllFaculties();
 
 	List<School> findAllSchool();
+
+	List<UDCTeacher> findAllUDCTeacher();
 
 }

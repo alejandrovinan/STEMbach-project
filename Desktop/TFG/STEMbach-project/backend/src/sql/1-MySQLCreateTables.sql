@@ -1,9 +1,12 @@
+DROP TABLE LeadsProject;
+DROP TABLE Project;
 DROP TABLE UDCTeacher;
 DROP TABLE STEMCoordinator;
 DROP TABLE Faculty;
 DROP TABLE CenterHistory;
 DROP TABLE School;
 DROP TABLE CenterSTEMCoordinator;
+DROP TABLE Biennium;
 
 CREATE TABLE Faculty (
     id BIGINT NOT NULL AUTO_INCREMENT,
@@ -80,20 +83,31 @@ CREATE TABLE CenterHistory (
                            REFERENCES School (id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE Biennium (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    dateRange VARCHAR(20) NOT NULL,
+    CONSTRAINT BienniumPK PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 CREATE TABLE Project (
     id BIGINT NOT NULL AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     description VARCHAR(200) NOT NULL,
-    observations VARCHAR(200) NOT NULL,
+    observations VARCHAR(200),
     modality TINYINT NOT NULL,
-    url VARCHAR(60),
+    url VARCHAR(100),
     offerZone TINYINT NOT NULL,
     revised BIT NOT NULL,
     active BIT NOT NULL,
     maxGroups FLOAT NOT NULL,
     studentsPerGroup FLOAT NOT NULL,
-    biennium VARCHAR(60) NOT NULL,
-    CONSTRAINT ProjectPK PRIMARY KEY (id)
+    bienniumId BIGINT NOT NULL,
+    udcTeacherId BIGINT NOT NULL,
+    CONSTRAINT ProjectPK PRIMARY KEY (id),
+    CONSTRAINT BienniumIdProjectFK FOREIGN KEY (bienniumId)
+                     REFERENCES Biennium (id),
+    CONSTRAINT UDCTeacherIdProjectFK FOREIGN KEY (udcTeacherId)
+                     REFERENCES UDCTeacher (id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE LeadsProject (
@@ -101,7 +115,9 @@ CREATE TABLE LeadsProject (
     projectId BIGINT NOT NULL,
     udcTeacherId BIGINT NOT NULL,
     CONSTRAINT LeadsProjectPK PRIMARY KEY (id),
-    CONSTRAINT ProjectIdLeadsProjectFK FOREIGN KEY (projectId),
+    CONSTRAINT ProjectIdLeadsProjectFK FOREIGN KEY (projectId)
+                          REFERENCES Project (id),
     CONSTRAINT UDCTeacherIdLeadsProjectFK FOREIGN KEY (udcTeacherId)
+                          REFERENCES UDCTeacher (id)
 ) ENGINE = InnoDB;
 

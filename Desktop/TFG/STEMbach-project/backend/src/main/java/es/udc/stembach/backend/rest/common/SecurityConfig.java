@@ -29,12 +29,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilter(new JwtFilter(authenticationManager(), jwtGenerator))
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/users/createAccount").hasRole("STEMCOORDINATOR")
-				.antMatchers(HttpMethod.PUT, "/users/*").hasRole("STEMCOORDINATOR")
+			.antMatchers(HttpMethod.PUT, "/users/*").hasRole("STEMCOORDINATOR")
+			.antMatchers(HttpMethod.GET, "/users/selectorTeachers").permitAll()
 			.antMatchers(HttpMethod.POST, "/users/login").permitAll()
 			.antMatchers(HttpMethod.POST, "/users/loginFromServiceToken").permitAll()
 			.antMatchers(HttpMethod.GET, "/users/faculties").permitAll()
 			.antMatchers(HttpMethod.GET, "/users/schools").permitAll()
+			.antMatchers(HttpMethod.GET, "/projects/*").permitAll()
+			.antMatchers(HttpMethod.GET, "/projects/projectDetails/*").permitAll()
 			.antMatchers(HttpMethod.POST, "/users/*/changePassword").hasAnyRole("STEMCOORDINATOR","UDCTEACHER", "CENTERSTEMCOORDINATOR")
+			.antMatchers(HttpMethod.POST, "/projects/createProject").hasRole("UDCTEACHER")
+			.antMatchers(HttpMethod.POST, "/projects/createBiennium").hasRole("STEMCOORDINATOR")
 			.anyRequest().denyAll();
 
 	}

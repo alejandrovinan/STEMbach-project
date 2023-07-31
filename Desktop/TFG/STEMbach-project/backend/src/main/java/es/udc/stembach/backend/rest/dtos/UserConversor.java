@@ -1,9 +1,9 @@
 package es.udc.stembach.backend.rest.dtos;
 
-import es.udc.stembach.backend.model.entities.CenterSTEMCoordinator;
-import es.udc.stembach.backend.model.entities.STEMCoordinator;
-import es.udc.stembach.backend.model.entities.UDCTeacher;
-import es.udc.stembach.backend.model.entities.User;
+import es.udc.stembach.backend.model.entities.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserConversor {
 	
@@ -57,9 +57,28 @@ public class UserConversor {
 	}
 	
 	public final static AuthenticatedUserDto toAuthenticatedUserDto(String serviceToken, User user) {
-		
 		return new AuthenticatedUserDto(serviceToken, toUserDto(user));
-		
 	}
 
+	public final static UDCTeacherSummaryDto toUDCTeacherSummaryDto(UDCTeacher udcTeacher){
+		return new UDCTeacherSummaryDto(udcTeacher.getName(), udcTeacher.getSurname(), udcTeacher.getSecondSurname(), udcTeacher.getEmail(), udcTeacher.getDni());
+	}
+
+	public final static List<UDCTeacherSummaryDto> toUDCTeacherSummaryDtos(List<UDCTeacher> udcTeacherList){
+		List<UDCTeacherSummaryDto> udcTeacherSummaryDtos = new ArrayList<>();
+		udcTeacherList.forEach(t -> udcTeacherSummaryDtos.add(toUDCTeacherSummaryDto(t)));
+
+		return udcTeacherSummaryDtos;
+	}
+
+	public final static UDCTeacherSelectorDto toUDCTeacherSelectorDto(UDCTeacher udcTeacher){
+		return new UDCTeacherSelectorDto(udcTeacher.getId(), udcTeacher.getName(), udcTeacher.getSurname(), udcTeacher.getSecondSurname());
+	}
+
+	public final static List<UDCTeacherSelectorDto> toUdcTeachersSelectorDto(List<UDCTeacher> udcTeacherList){
+		List<UDCTeacherSelectorDto> udcTeacherSelectorDtos = new ArrayList<>();
+		udcTeacherList.forEach(t -> udcTeacherSelectorDtos.add(toUDCTeacherSelectorDto(t)));
+
+		return udcTeacherSelectorDtos;
+	}
 }

@@ -54,3 +54,6 @@ export const findAllFaculties = (onSuccess) =>
 
 export const findAllSchools = (onSuccess) =>
     appFetch('/users/schools', config('GET'), onSuccess);
+
+export const findAllUDCTeachers = (onSuccess) =>
+    appFetch("/users/selectorTeachers", config('GET'), onSuccess);

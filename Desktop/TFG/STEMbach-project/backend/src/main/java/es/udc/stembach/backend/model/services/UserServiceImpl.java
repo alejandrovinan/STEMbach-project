@@ -222,4 +222,16 @@ public class UserServiceImpl implements UserService {
 		return schoolList;
 	}
 
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<UDCTeacher> findAllUDCTeacher(){
+		Iterable<UDCTeacher> udcTeachersIterable = udcTeacherDao.findAll(Sort.by(Sort.Direction.ASC, "name"));
+
+		List<UDCTeacher> udcTeachers = new ArrayList<>();
+
+		udcTeachersIterable.forEach(t -> udcTeachers.add(t));
+
+		return udcTeachers;
+	}
 }

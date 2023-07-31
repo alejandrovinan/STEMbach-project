@@ -32,6 +32,7 @@ export default {
     'project.global.validator.email': 'Introduzca una dirección de correo electrónico correcta',
     'project.global.validator.passwordsDoNotMatch': 'Las contraseñas no coinciden',
     'project.global.validator.required': 'Campo obligatorio',
+    'project.global.validator.invalidUrl': 'URL inválida',
 
     'project.users.ChangePassword.fields.confirmNewPassword': 'Confirmar contraseña nueva',
     'project.users.ChangePassword.fields.newPassword': 'Contraseña nueva',
@@ -46,6 +47,26 @@ export default {
 
     'project.users.login.roles.stemcoordinator': 'Coordinador STEMBACH',
     'project.users.login.roles.udcteacher': 'Profesor UDC',
-    'project.users.login.roles.centerstemcoordinator': 'Coordinador STEMBACH en centro'
+    'project.users.login.roles.centerstemcoordinator': 'Coordinador STEMBACH en centro',
 
+    'project.projects.CreateProject.title': 'Proponer un nuevo proyecto',
+    'project.projects.form.title': 'Título',
+    'project.projects.form.description': 'Descripción',
+    'project.projects.form.observations': 'Observaciones',
+    'project.projects.form.modality': 'Modalidad',
+    'project.projects.form.modalitySelector.void': 'Escoge modalidad...',
+    'project.projects.form.modalitySelector.inPerson': 'Presencial',
+    'project.projects.form.modalitySelector.distance': 'A distancia',
+    'project.projects.form.modalitySelector.inPerson_distance': 'Presencial & a distancia',
+    'project.projects.form.url': 'URL del proyecto',
+    'project.projects.form.offerZone': 'Área ofertada',
+    'project.projects.form.offerZoneSelector.void': 'Escoge la zona ofertada...',
+    'project.projects.form.offerZoneSelector.cor': 'A Coruña',
+    'project.projects.form.offerZoneSelector.ferr': 'Ferrol',
+    'project.projects.form.offerZoneSelector.gal': 'Galicia',
+    'project.projects.form.maxGroups': 'Número de grupos permitidos',
+    'project.projects.form.studentsPerGroup': 'Alumnos permitidos por grupo',
+    'project.projects.form.biennium': 'Bienio',
+    'project.projects.form.teachers': 'Profesores a cargo',
+    'project.projects.form.submit': 'Crear proyecto'
 }

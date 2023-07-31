@@ -172,7 +172,7 @@ const CreateAccounts = () => {
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label htmlFor="password" className="col-md-3 col-form-label">
+                            <label htmlFor="role" className="col-md-3 col-form-label">
                                 <FormattedMessage id="project.global.fields.role"/>
                             </label>
                             <div className="col-md-4">

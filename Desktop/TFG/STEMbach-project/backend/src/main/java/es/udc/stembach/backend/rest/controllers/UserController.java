@@ -85,8 +85,7 @@ public class UserController {
 
 	@PostMapping("/createAccount")
 	public ResponseEntity<AuthenticatedUserDto> createAccount(@RequestAttribute Long userId,
-															  @Validated({UserDto.AllValidations.class})
-															  @RequestBody UserDto userDto)
+															  @Validated({UserDto.AllValidations.class}) @RequestBody UserDto userDto)
 			throws DuplicateInstanceException, FacultyNotFoundException, SchoolNotFoundException {
 
 		User user = new User();
@@ -160,6 +159,11 @@ public class UserController {
 	@GetMapping("/schools")
 	public List<SchoolDto> findAllSchools(){
 		return toSchoolDtos(userService.findAllSchool());
+	}
+
+	@GetMapping("/selectorTeachers")
+	public List<UDCTeacherSelectorDto> findAllUDCTeacher(){
+		return toUdcTeachersSelectorDto(userService.findAllUDCTeacher());
 	}
 	
 }

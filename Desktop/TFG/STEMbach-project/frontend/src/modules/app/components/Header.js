@@ -3,10 +3,14 @@ import {Link} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
 
 import users from '../../users';
+import React from "react";
 
 const Header = () => {
 
     const userName = useSelector(users.selectors.getEmail);
+    const user = useSelector(users.selectors.getUser);
+    const isStemCoordinator = user ? user.role === "STEMCOORDINATOR" : false;
+    const isUDCTeacher = user ? user.role === "UDCTEACHER" : false;
 
     return (
 
@@ -22,12 +26,24 @@ const Header = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <ul className="navbar-nav mr-auto">
+                    {isStemCoordinator &&
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/users/Accounts">
+                            <FormattedMessage id="project.user.accounts.title"/>
+                        </Link>
+                    </li>}
+                    {isUDCTeacher &&
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/projects/CreateProjects">
+                            <FormattedMessage id="project.projects.CreateProject.title"/>
+                        </Link>
+                    </li>}
                 </ul>
                 
                 {userName ? 
 
                 <ul className="navbar-nav">
-                
+
                     <li className="nav-item dropdown">
 
                         <a className="dropdown-toggle nav-link" href="/"
