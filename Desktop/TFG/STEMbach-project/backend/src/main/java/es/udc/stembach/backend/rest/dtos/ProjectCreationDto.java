@@ -14,6 +14,7 @@ public class ProjectCreationDto {
 
     public interface AllValidations {}
 
+    private Long id;
     private String title;
     private String description;
     private String observations;
@@ -41,14 +42,32 @@ public class ProjectCreationDto {
         this.teacherIds = teacherIds;
     }
 
+    public ProjectCreationDto(Long id, String title, String description, String observations, Project.Modality modality, String url, Project.OfferZone offerZone, Integer maxGroups, Integer studentsPerGroup, Long bienniumId, List<Long> teacherIds) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.observations = observations;
+        this.modality = modality;
+        this.url = url;
+        this.offerZone = offerZone;
+        this.maxGroups = maxGroups;
+        this.studentsPerGroup = studentsPerGroup;
+        this.bienniumId = bienniumId;
+        this.teacherIds = teacherIds;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
     @NotNull(groups={AllValidations.class})
-    @Size(min=1, max=100, groups={AllValidations.class})
+    @Size(min=1, max=200, groups={AllValidations.class})
     public String getTitle() {
         return title;
     }
 
     @NotNull(groups={AllValidations.class})
-    @Size(min=1, max=200, groups={AllValidations.class})
+    @Size(min=1, max=800, groups={AllValidations.class})
     public String getDescription() {
         return description;
     }

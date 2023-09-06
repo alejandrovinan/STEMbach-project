@@ -61,7 +61,7 @@ public class UserConversor {
 	}
 
 	public final static UDCTeacherSummaryDto toUDCTeacherSummaryDto(UDCTeacher udcTeacher){
-		return new UDCTeacherSummaryDto(udcTeacher.getName(), udcTeacher.getSurname(), udcTeacher.getSecondSurname(), udcTeacher.getEmail(), udcTeacher.getDni());
+		return new UDCTeacherSummaryDto(udcTeacher.getId(), udcTeacher.getName(), udcTeacher.getSurname(), udcTeacher.getSecondSurname(), udcTeacher.getEmail(), udcTeacher.getDni());
 	}
 
 	public final static List<UDCTeacherSummaryDto> toUDCTeacherSummaryDtos(List<UDCTeacher> udcTeacherList){
@@ -80,5 +80,27 @@ public class UserConversor {
 		udcTeacherList.forEach(t -> udcTeacherSelectorDtos.add(toUDCTeacherSelectorDto(t)));
 
 		return udcTeacherSelectorDtos;
+	}
+
+	public final static Student toStudent(StudentDto studentDto){
+		return new Student(studentDto.getName(), studentDto.getSurname(), studentDto.getSecondSurname(), studentDto.getRole(), null, null, studentDto.getDni());
+	}
+
+	public final static List<Student> toStudentList(List<StudentDto> studentDtos){
+		List<Student> studentList = new ArrayList<>();
+		studentDtos.forEach(s -> studentList.add(toStudent(s)));
+
+		return studentList;
+	}
+
+	public final static StudentDto toStudentDto(Student student){
+		return new StudentDto(student.getId(), student.getName(), student.getSurname(), student.getSecondSurname(), student.getDni(), student.getRole(), student.getSchool().getId(), student.getStudentGroup().getId());
+	}
+
+	public final static List<StudentDto> toStudentDtos(List<Student> students){
+		List<StudentDto> studentDtos = new ArrayList<>();
+		students.forEach(s -> studentDtos.add(toStudentDto(s)));
+
+		return studentDtos;
 	}
 }

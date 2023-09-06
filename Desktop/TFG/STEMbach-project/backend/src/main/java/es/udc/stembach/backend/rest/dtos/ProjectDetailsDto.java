@@ -21,9 +21,12 @@ public class ProjectDetailsDto {
     private Integer studentsPerGroup;
     private BienniumDto biennium;
     private UDCTeacherSummaryDto createdBy;
+    private Boolean assigned;
     private List<UDCTeacherSummaryDto> teacherList;
 
-    public ProjectDetailsDto(Long id, String title, String description, String observations, Project.Modality modality, String url, Project.OfferZone offerZone, Boolean revised, Boolean active, Integer maxGroups, Integer studentsPerGroup, BienniumDto biennium, UDCTeacherSummaryDto createdBy) {
+    public ProjectDetailsDto(Long id, String title, String description, String observations, Project.Modality modality,
+                             String url, Project.OfferZone offerZone, Boolean revised, Boolean active, Integer maxGroups,
+                             Integer studentsPerGroup, BienniumDto biennium, UDCTeacherSummaryDto createdBy, Boolean assigned) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -37,6 +40,7 @@ public class ProjectDetailsDto {
         this.studentsPerGroup = studentsPerGroup;
         this.biennium = biennium;
         this.createdBy = createdBy;
+        this.assigned = assigned;
         this.teacherList = new ArrayList<>();
     }
 }

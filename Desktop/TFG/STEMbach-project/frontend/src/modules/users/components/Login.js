@@ -43,7 +43,7 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className="container">
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
             <div className="card bg-light border-dark">
                 <h5 className="card-header">
@@ -87,7 +87,7 @@ const Login = () => {
                                 <FormattedMessage id="project.global.fields.role"/>
                             </label>
                             <div className="col-md-4">
-                                <select name="roles" id="roleSelector" className="form-control" onChange={e => setRole(e.target.value)} value={role}>
+                                <select name="roles" id="roleSelector" className="form-select" onChange={e => setRole(e.target.value)} value={role}>
                                     <option value="STEMCOORDINATOR"><FormattedMessage id="project.users.login.roles.stemcoordinator"/></option>
                                     <option value="UDCTEACHER"><FormattedMessage id="project.users.login.roles.udcteacher"/></option>
                                     <option value="CENTERSTEMCOORDINATOR"><FormattedMessage id="project.users.login.roles.centerstemcoordinator"/></option>

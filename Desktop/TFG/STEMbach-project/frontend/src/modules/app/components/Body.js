@@ -5,7 +5,8 @@ import AppGlobalComponents from './AppGlobalComponents';
 import Home from './Home';
 import {Login, SignUp, UpdateProfile, ChangePassword, Logout, Accounts, CreateAccounts} from '../../users';
 import users from '../../users';
-import {CreateProjects, ProjectDetails} from "../../projects";
+import {CreateProjects, ProjectDetails, ProjectSearch} from "../../projects";
+import RequestForm from "../../projects/components/RequestForm";
 
 const Body = () => {
 
@@ -16,7 +17,7 @@ const Body = () => {
     
    return (
 
-        <div className="container">
+        <div className="container-fluid">
             <br/>
             <AppGlobalComponents/>
             <Routes>
@@ -30,6 +31,8 @@ const Body = () => {
                 {loggedIn && isStemCoordinator && <Route path="/users/CreateAccounts" element={<CreateAccounts/>}/>}
                 {loggedIn && (isUDCTeacher || isStemCoordinator) && <Route path="/projects/CreateProjects" element={<CreateProjects/>}/>}
                 <Route path="/projects/ProjectDetails/:id" element={<ProjectDetails/>}/>
+                <Route path="/projects/ProjectSearch" element={<ProjectSearch/>}/>
+                <Route path="/projects/:id/RequestProject" element={<RequestForm/>}/>
             </Routes>
         </div>
 

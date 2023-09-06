@@ -26,6 +26,11 @@ const Header = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <ul className="navbar-nav mr-auto">
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/projects/ProjectSearch">
+                            <FormattedMessage id="project.projects.searchProject.header"/>
+                        </Link>
+                    </li>
                     {isStemCoordinator &&
                     <li className="nav-item">
                         <Link className="nav-link" to="/users/Accounts">

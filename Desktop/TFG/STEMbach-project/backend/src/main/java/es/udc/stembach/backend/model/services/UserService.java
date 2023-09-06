@@ -1,9 +1,6 @@
 package es.udc.stembach.backend.model.services;
 
-import es.udc.stembach.backend.model.entities.Faculty;
-import es.udc.stembach.backend.model.entities.School;
-import es.udc.stembach.backend.model.entities.UDCTeacher;
-import es.udc.stembach.backend.model.entities.User;
+import es.udc.stembach.backend.model.entities.*;
 import es.udc.stembach.backend.model.exceptions.*;
 
 import java.util.List;
@@ -25,5 +22,9 @@ public interface UserService {
 	List<School> findAllSchool();
 
 	List<UDCTeacher> findAllUDCTeacher();
+
+	List<Student> findAllStudentsOfGroup(Long groupId);
+
+	Long getSchoolId(Long centerStemCoordinatorId) throws InstanceNotFoundException;
 
 }

@@ -71,7 +71,6 @@ const CreateProjects = () => {
             return true;
         }
         catch(e){
-            console.log(validUrl);
             setValidUrl(false);
             return false;
         }
@@ -79,8 +78,6 @@ const CreateProjects = () => {
 
     const handleSubmit = event => {
         event.preventDefault();
-        console.log(teacherIds);
-        console.log(teachersSelectorHolder);
         if(form.checkValidity() && isValidUrl(url)){
             dispatch(actions.createProject(
                 title.trim(), description.trim(), observations.trim(), modality.trim(),
@@ -99,10 +96,10 @@ const CreateProjects = () => {
     }
 
     return (
-        <div>
+        <div className="container">
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
             <div className="card bg-light border-dark">
-                <h5 className="card-header">
+                <h5 className="card-header text-center">
                     <FormattedMessage id="project.projects.CreateProject.title"/>
                 </h5>
                 <div className="card-body">
@@ -149,7 +146,7 @@ const CreateProjects = () => {
                                 <FormattedMessage id="project.projects.form.modality"/>
                             </label>
                             <div className="col-md-7">
-                                <select name="modality" id="modalitySelector" className="form-control" onChange={e => setModality(e.target.value)} value={modality} required>
+                                <select name="modality" id="modalitySelector" className="form-select" onChange={e => setModality(e.target.value)} value={modality} required>
                                     <option disabled={true} value=""><FormattedMessage id="project.projects.form.modalitySelector.void"/></option>
                                     <option value="PRESENCIAL"><FormattedMessage id="project.projects.form.modalitySelector.inPerson"/></option>
                                     <option value="DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.distance"/></option>
@@ -177,7 +174,7 @@ const CreateProjects = () => {
                                 <FormattedMessage id="project.projects.form.offerZone"/>
                             </label>
                             <div className="col-md-7">
-                                <select name="offerZone" id="offerZoneSelector" className="form-control" onChange={e => setOfferZone(e.target.value)} value={offerZone} required>
+                                <select name="offerZone" id="offerZoneSelector" className="form-select" onChange={e => setOfferZone(e.target.value)} value={offerZone} required>
                                     <option disabled={true} value=""><FormattedMessage id="project.projects.form.offerZoneSelector.void"/></option>
                                     <option value="COR"><FormattedMessage id="project.projects.form.offerZoneSelector.cor"/></option>
                                     <option value="FERR"><FormattedMessage id="project.projects.form.offerZoneSelector.ferr"/></option>
@@ -217,7 +214,7 @@ const CreateProjects = () => {
                                 <FormattedMessage id="project.projects.form.biennium"/>
                             </label>
                             <div className="col-md-7">
-                                <Selector id="bienniumSelector" className="form-control" value={bienniumId}
+                                <Selector id="bienniumSelector" className="form-select" value={bienniumId}
                                           onChange={e => setBienniumId(e.target.value)} data={bienniums}/>
                                 <div className="invalid-feedback">
                                     <FormattedMessage id='project.global.validator.required'/>

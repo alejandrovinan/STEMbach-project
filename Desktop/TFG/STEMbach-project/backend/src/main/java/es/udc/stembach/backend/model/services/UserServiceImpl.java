@@ -41,6 +41,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private CenterHistoryDao centerHistoryDao;
 
+	@Autowired
+	private StudentDao studentDao;
+
 	private void createUDCTeacher(UDCTeacher udcTeacher, Long facultyId) throws DuplicateInstanceException, FacultyNotFoundException {
 
 		if(udcTeacherDao.existsByEmail(udcTeacher.getEmail())){
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
 	private void createCenterSTEMCoordinator(CenterSTEMCoordinator centerSTEMCoordinator, Long schoolId) throws SchoolNotFoundException, DuplicateInstanceException {
 
 		if(centerSTEMCoordinatorDao.existsByEmail(centerSTEMCoordinator.getEmail())){
-			throw new DuplicateInstanceException("project.entities.UDCTeacher", centerSTEMCoordinator.getEmail());
+			throw new DuplicateInstanceException("project.entities.centerstemcoordinator", centerSTEMCoordinator.getEmail());
 		}
 		if(schoolId == null){
 			throw new SchoolNotFoundException(0L);
@@ -233,5 +236,27 @@ public class UserServiceImpl implements UserService {
 		udcTeachersIterable.forEach(t -> udcTeachers.add(t));
 
 		return udcTeachers;
+	}
+
+	@Override
+	public List<Student> findAllStudentsOfGroup(Long groupId) {
+		Iterable<Student> students = studentDao.findByStudentGroupId(groupId);
+
+		List<Student> studentsList = new ArrayList<>();
+
+		students.forEach(s -> studentsList.add(s));
+
+		return studentsList;
+	}
+
+	@Override
+	public Long getSchoolId(Long centerStemCoordinatorId) throws InstanceNotFoundException {
+		Optional<CenterHistory> centerHistoryOptional = centerHistoryDao.findByCenterSTEMCoordinatorIdAndEndDateIsNull(centerStemCoordinatorId);
+
+		if(centerHistoryOptional.isEmpty()){
+			throw new InstanceNotFoundException("project.users.centerhistory", centerStemCoordinatorId);
+		}
+
+		return centerHistoryOptional.get().getId();
 	}
 }

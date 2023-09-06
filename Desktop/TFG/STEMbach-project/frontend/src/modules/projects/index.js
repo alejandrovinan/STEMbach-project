@@ -5,6 +5,9 @@ import * as selectors from "./selectors";
 
 export {default as CreateProjects} from './components/CreateProjects';
 export {default as ProjectDetails} from './components/ProjectDetails';
+export {default as ProjectSearch} from './components/ProjectSearch';
+export {default as FilerSidebar} from './components/FilterSidebar';
+export {default as Request} from './components/RequestForm';
 
 // eslint-disable-next-line
 export default {actions, actionTypes, reducer, selectors};

@@ -50,6 +50,7 @@ export default {
     'project.users.login.roles.centerstemcoordinator': 'Coordinador STEMBACH en centro',
 
     'project.projects.CreateProject.title': 'Proponer un nuevo proyecto',
+    'project.projects.searchProject.header': 'Buscar proyectos',
     'project.projects.form.title': 'Título',
     'project.projects.form.description': 'Descripción',
     'project.projects.form.observations': 'Observaciones',
@@ -68,5 +69,31 @@ export default {
     'project.projects.form.studentsPerGroup': 'Alumnos permitidos por grupo',
     'project.projects.form.biennium': 'Bienio',
     'project.projects.form.teachers': 'Profesores a cargo',
-    'project.projects.form.submit': 'Crear proyecto'
+    'project.projects.form.submit': 'Crear proyecto',
+
+    'project.projects.sidebar.headerTitle': 'Filtros',
+    'project.projects.sidebar.revised': 'Revisado',
+    'project.projects.sidebar.active': 'Activo',
+    'project.projects.sidebar.maxGroups': 'Grupos permitidos',
+    'project.projects.sidebar.studentsPerGroup': 'Alumnos/grupo',
+    'project.projects.sidebar.assigned': 'Asignado',
+    'project.projects.sidebar.clearFilter': 'Limpiar filtro',
+    'project.projects.sidebar.applyFilter': 'Aplicar filtro',
+
+    'project.projects.projectDetails.reviseButton': 'Aprobar proyecto',
+    'project.projects.projectDetails.editButton': 'Editar proyecto',
+    'project.projects.projectDetails.dropProject': 'Cancelar proyecto',
+    'project.projects.projectDetails.requestProject': 'Solicitar project',
+    'project.projects.projectDetails.approvalModal.text': 'Dese aprobar este proyecto?',
+    'project.projects.projectDetails.dropModal.text': 'Desea dar de baja este proyecto?',
+    'project.projects.projectDetails.confirmEditButton': 'Guardar',
+    'project.projects.projectDetails.cancelEditButton': 'Cancelar',
+
+    'project.projects.RequestForm.title': 'Solicitar proyecto',
+    'project.projects.RequestForm.name': 'Nombre',
+    'project.projects.RequestForm.surname': 'Apellido',
+    'project.projects.RequestForm.secondSurname': 'Segundo apellido',
+    'project.projects.RequestForm.dni': 'DNI',
+    'project.projects.RequestForm.requestProject': 'Solicitar',
+    'project.prijects.RequestForm.noStudents': 'Haga click en el botón "+" para añadir estudiantes'
 }

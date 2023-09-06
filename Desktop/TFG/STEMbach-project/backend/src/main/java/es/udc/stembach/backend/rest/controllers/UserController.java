@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static es.udc.stembach.backend.rest.dtos.FacultyConversor.toFacultyDtos;
 import static es.udc.stembach.backend.rest.dtos.SchoolConversor.toSchoolDtos;
@@ -110,21 +111,31 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public AuthenticatedUserDto login(@Validated @RequestBody LoginParamsDto params)
-		throws IncorrectLoginException {
+			throws IncorrectLoginException, InstanceNotFoundException {
+		Long schoolId = null;
 		User user = userService.login(params.getEmail(), params.getPassword(), params.getRoleType());
-			
-		return toAuthenticatedUserDto(generateServiceToken(user), user);
+		AuthenticatedUserDto userDto = toAuthenticatedUserDto(generateServiceToken(user), user);
+
+		if(Objects.equals(userDto.getUserDto().getRole(), "CENTERSTEMCOORDINATOR")){
+			schoolId = userService.getSchoolId(userDto.getUserDto().getId());
+			userDto.getUserDto().setSchoolId(schoolId);
+		}
+		return userDto;
 		
 	}
 	
 	@PostMapping("/loginFromServiceToken")
 	public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId, @RequestAttribute User.RoleType role,
 		@RequestAttribute String serviceToken) throws InstanceNotFoundException {
-		
+		Long schoolId = null;
 		User user = userService.loginFromId(userId, role);
-		
-		return toAuthenticatedUserDto(serviceToken, user);
-		
+		AuthenticatedUserDto userDto = toAuthenticatedUserDto(serviceToken, user);
+
+		if(Objects.equals(userDto.getUserDto().getRole(), "CENTERSTEMCOORDINATOR")) {
+			schoolId = userService.getSchoolId(userDto.getUserDto().getId());
+			userDto.getUserDto().setSchoolId(schoolId);
+		}
+			return userDto;
 	}
 
 
@@ -164,6 +175,11 @@ public class UserController {
 	@GetMapping("/selectorTeachers")
 	public List<UDCTeacherSelectorDto> findAllUDCTeacher(){
 		return toUdcTeachersSelectorDto(userService.findAllUDCTeacher());
+	}
+
+	@GetMapping("/group/{id}")
+	public List<StudentDto> findGroupStudents(@PathVariable Long id){
+		return toStudentDtos(userService.findAllStudentsOfGroup(id));
 	}
 	
 }

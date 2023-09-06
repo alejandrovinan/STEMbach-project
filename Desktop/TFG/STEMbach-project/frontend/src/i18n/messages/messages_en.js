@@ -50,6 +50,7 @@ export default {
     'project.users.login.roles.centerstemcoordinator': 'Center STEMBACH Coordinator',
 
     'project.projects.CreateProject.title': 'Create a new project',
+    'project.projects.searchProject.header': 'Search projects',
     'project.projects.form.title': 'Title',
     'project.projects.form.description': 'Description',
     'project.projects.form.observations': 'Observations',
@@ -68,7 +69,32 @@ export default {
     'project.projects.form.studentsPerGroup': 'Students per group allowed',
     'project.projects.form.biennium': 'Biennium',
     'project.projects.form.teachers': 'Teachers in charge',
-    'project.projects.form.submit': 'Create project'
+    'project.projects.form.submit': 'Create project',
+
+    'project.projects.sidebar.headerTitle': 'Filters',
+    'project.projects.sidebar.revised': 'Revised',
+    'project.projects.sidebar.active': 'Active',
+    'project.projects.sidebar.maxGroups': 'Groups permitted',
+    'project.projects.sidebar.studentsPerGroup': 'Students/group',
+    'project.projects.sidebar.assigned': 'Assigned',
+    'project.projects.sidebar.clearFilter': 'Clear filter',
+    'project.projects.sidebar.applyFilter': 'Apply filter',
+
+    'project.projects.projectDetails.reviseButton': 'Aprove project',
+    'project.projects.projectDetails.editButton': 'Edit project',
+    'project.projects.projectDetails.dropProject': 'Cancel project',
+    'project.projects.projectDetails.requestProject': 'Request project',
+    'project.projects.projectDetails.approvalModal.text': 'Do you wish to approve this project?',
+    'project.projects.projectDetails.dropModal.text': 'Do you wish to cancel this project?',
+    'project.projects.projectDetails.confirmEditButton': 'Save',
+    'project.projects.projectDetails.cancelEditButton': 'Cancel',
+
+    'project.projects.RequestForm.title': 'Request project',
+    'project.projects.RequestForm.name': 'Name',
+    'project.projects.RequestForm.surname': 'Surname',
+    'project.projects.RequestForm.secondSurname': 'Second surname',
+    'project.projects.RequestForm.dni': 'ID',
+    'project.projects.RequestForm.requestProject': 'Request'
 
 
 }

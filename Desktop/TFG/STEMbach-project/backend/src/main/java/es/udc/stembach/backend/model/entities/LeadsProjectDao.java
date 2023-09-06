@@ -13,4 +13,6 @@ public interface LeadsProjectDao extends PagingAndSortingRepository<LeadsProject
             "ORDER BY u.name, u.surname")
     public List<UDCTeacher> findAllTeachersByProject(Long projectId);
 
+    public List<LeadsProject> findAllByProjectId(Long projectId);
+
 }

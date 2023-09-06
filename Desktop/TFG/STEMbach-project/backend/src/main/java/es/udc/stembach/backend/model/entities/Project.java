@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Project {
 
     public enum Modality {PRESENCIAL, DISTANCIA, PRESENCIAL_DISTANCIA};
-    public enum OfferZone {COR, FERR, GAL,};
+    public enum OfferZone {COR, FERR, GAL};
 
     private Long id;
     private String title;
@@ -21,12 +21,13 @@ public class Project {
     private Integer studentsPerGroup;
     private Biennium biennium;
     private UDCTeacher createdBy;
+    private Boolean assigned;
 
     public Project() {
     }
 
     public Project(String title, String description, String observations, Modality modality, String url,
-                   OfferZone offerZone, Boolean revised, Boolean active, Integer maxGroups, Integer studentsPerGroup, Biennium biennium, UDCTeacher createdBy) {
+                   OfferZone offerZone, Boolean revised, Boolean active, Integer maxGroups, Integer studentsPerGroup, Biennium biennium, UDCTeacher createdBy, Boolean assigned) {
         this.title = title;
         this.description = description;
         this.observations = observations;
@@ -39,6 +40,24 @@ public class Project {
         this.studentsPerGroup = studentsPerGroup;
         this.biennium = biennium;
         this.createdBy = createdBy;
+        this.assigned = assigned;
+    }
+
+    public Project(Long id, String title, String description, String observations, Modality modality, String url, OfferZone offerZone, Boolean revised, Boolean active, Integer maxGroups, Integer studentsPerGroup, Biennium biennium, UDCTeacher createdBy, Boolean assigned) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.observations = observations;
+        this.modality = modality;
+        this.url = url;
+        this.offerZone = offerZone;
+        this.revised = revised;
+        this.active = active;
+        this.maxGroups = maxGroups;
+        this.studentsPerGroup = studentsPerGroup;
+        this.biennium = biennium;
+        this.createdBy = createdBy;
+        this.assigned = assigned;
     }
 
     @Id
@@ -149,5 +168,13 @@ public class Project {
 
     public void setCreatedBy(UDCTeacher createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public Boolean getAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(Boolean assigned) {
+        this.assigned = assigned;
     }
 }
