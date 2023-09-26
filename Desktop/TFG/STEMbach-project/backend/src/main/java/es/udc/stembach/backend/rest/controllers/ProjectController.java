@@ -1,7 +1,9 @@
 package es.udc.stembach.backend.rest.controllers;
 
 import es.udc.stembach.backend.model.entities.Project;
+import es.udc.stembach.backend.model.entities.ProjectInstance;
 import es.udc.stembach.backend.model.entities.Request;
+import es.udc.stembach.backend.model.entities.User;
 import es.udc.stembach.backend.model.exceptions.DuplicateInstanceException;
 import es.udc.stembach.backend.model.exceptions.InstanceNotFoundException;
 import es.udc.stembach.backend.model.exceptions.MaxStudentsInProjectException;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -150,5 +153,58 @@ public class ProjectController {
         RequestDto requestDto = toRequestDto(request);
         requestDto.setStudents(toStudentDtos(userService.findAllStudentsOfGroup(request.getStudentGroup().getId())));
         return requestDto;
+    }
+
+    @GetMapping("/getAllProjectRequests/{id}")
+    public BlockDto<RequestDto> getAllProjectRequests(@PathVariable Long id,
+                                                      @RequestParam int page,
+                                                      @RequestParam int size){
+
+        Block<Request> requests = projectService.getAllProjectRequests(id, page, size);
+        List<RequestDto> requestDtos = new ArrayList<>();
+        RequestDto requestDto = null;
+
+       for(Request r : requests.getItems()){
+           requestDto = toRequestDto(r);
+           requestDto.setStudents(toStudentDtos(userService.findAllStudentsOfGroup(r.getStudentGroup().getId())));
+           requestDtos.add(requestDto);
+       }
+
+        return new BlockDto<>(requestDtos, requests.getExistMoreItems());
+    }
+
+    @PostMapping("/asignProjects")
+    public void asignProjects(){
+        projectService.asignProjects();
+    }
+
+    @GetMapping("/findProjectsInstancesSummary")
+    public BlockDto<ProjectInstanceSummaryDto> findProjectsByTeacher(@RequestAttribute Long userId,
+                                                                     @RequestParam String role,
+                                                                     @RequestParam int page,
+                                                                     @RequestParam int size){
+
+        Block<ProjectInstance> projectInstanceBlock = projectService.findProjectsInstances(userId, User.RoleType.valueOf(role), page, size);
+        List<ProjectInstanceSummaryDto> projectInstanceSummaryDtos = new ArrayList<>();
+        ProjectInstanceSummaryDto projectInstanceSummaryDto = null;
+        for(ProjectInstance p : projectInstanceBlock.getItems()){
+            projectInstanceSummaryDto = toProjectInstanceSummaryDto(p);
+            projectInstanceSummaryDto.setStudents(toStudentDtos(userService.findAllStudentsOfGroup(p.getStudentGroup().getId())));
+            projectInstanceSummaryDtos.add(projectInstanceSummaryDto);
+        }
+
+        return new BlockDto<>(projectInstanceSummaryDtos, projectInstanceBlock.getExistMoreItems());
+    }
+
+    @GetMapping("/projectInstanceDetails/{id}")
+    public ProjectInstanceDetailsDto findProjectInstanceDetails(@PathVariable Long id) throws InstanceNotFoundException {
+
+        ProjectInstance projectInstance = projectService.findProjectInstanceDetails(id);
+        ProjectInstanceDetailsDto projectInstanceDetailsDto = toProjectInstanceDetailsDto(projectInstance);
+        projectInstanceDetailsDto.setStudents(toStudentDtos(userService.findAllStudentsOfGroup(projectInstance.getStudentGroup().getId())));
+        List<UDCTeacherSummaryDto> udcTeacherSummaryDtos = toUDCTeacherSummaryDtos(projectService.findUdcTeachersOfProject(id));
+
+        //buscar profesores y alumnos y asignarlos
+        return projectInstanceDetailsDto;
     }
 }

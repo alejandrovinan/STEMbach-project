@@ -9,3 +9,6 @@ export const APPROVE_PROJECT_COMPLETED= "project/projects/approveProjectComplete
 export const CANCEL_PROJECT_COMPLETED= "/project/projects/cancelProjectCompleted";
 export const PROJECT_EDITED_COMPLETED= "/project/projects/projectEditedCompleted";
 export const CREATE_REQUEST_COMPLETED= "/project/projects/createRequestCompleted";
+export const VIEW_REQUESTS_COMPLETED= "/project/projects/viewRequestsCompleted";
+export const FIND_PROJECT_INSTANCES_SUMMARY_COMPLETED= "/project/projects/findProjectInstancesSummaryCompleted";
+export const CLEAR_PROJECT_INSTANCES_SUMMARY_COMPLETED= "/project/projects/clearProjectInstancesSummaryCompleted";

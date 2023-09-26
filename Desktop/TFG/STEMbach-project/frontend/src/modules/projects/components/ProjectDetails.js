@@ -9,6 +9,7 @@ import ApprovalModalView from "./ApprovalModalView";
 import users, {Selector} from "../../users";
 import {Errors} from "../../common";
 import Select from "react-select";
+import ProjectRequests from "./ProjectRequests";
 
 const ProjectDetails = () => {
 
@@ -16,6 +17,7 @@ const ProjectDetails = () => {
     const dispatch = useDispatch();
 
     const [editMode, setEditMode] = useState(false);
+    const [requestsMode, setRequestsMode] = useState(false);
     let form;
 
     const {id} = useParams();
@@ -153,9 +155,23 @@ const ProjectDetails = () => {
     }
 
 
+
     return (
         <div className="container">
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
+            <div className="d-flex flex-row">
+                {!requestsMode ?
+                <button type="button" className="btn btn-primary btn-md ml-auto" onClick={() => setRequestsMode(true)}>
+                    <FormattedMessage id="project.projects.projectDetails.viewRequests"/>
+                </button>
+                :
+                <button type="button" className="btn btn-secondary btn-md ml-auto" onClick={() => setRequestsMode(false)}>
+                    <FormattedMessage id="project.projects.projectDetails.cancelViewRequests"/>
+                </button>
+                }
+            </div>
+            <br/>
+            {!requestsMode ?
             <form ref={node => form = node} onSubmit={e => handleSubmit(e)}>
                 <div className="card bg-light border-dark">
                     <h3 className="card-header text-center">
@@ -379,7 +395,8 @@ const ProjectDetails = () => {
                         </div>}
                     </div>}
                 </div>
-            </form>
+            </form> :
+            <ProjectRequests/>}
         </div>
 
     );

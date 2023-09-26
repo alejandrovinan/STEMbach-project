@@ -31,5 +31,11 @@ public interface ProjectService {
 
     public Request requestProject(List<Student> students, Long projectId, Long school) throws InstanceNotFoundException, StudentAlreadyInGroupException, MaxStudentsInProjectException;
 
-    public List<Request> getAllProjectRequests(Long projectId);
+    public Block<Request> getAllProjectRequests(Long projectId, int page, int size);
+
+    public void asignProjects();
+
+    public Block<ProjectInstance> findProjectsInstances(Long id, User.RoleType roleType, int page, int size);
+
+    public ProjectInstance findProjectInstanceDetails(Long projectInstanceId) throws InstanceNotFoundException;
 }

@@ -95,5 +95,15 @@ export default {
     'project.projects.RequestForm.secondSurname': 'Segundo apellido',
     'project.projects.RequestForm.dni': 'DNI',
     'project.projects.RequestForm.requestProject': 'Solicitar',
-    'project.prijects.RequestForm.noStudents': 'Haga click en el botón "+" para añadir estudiantes'
+    'project.prijects.RequestForm.noStudents': 'Haga click en el botón "+" para añadir estudiantes',
+    'project.projects.projectDetails.viewRequests': 'Solicitudes',
+    'project.projects.projectDetails.cancelViewRequests': 'Volver',
+
+    'project.requests.table.status': 'Estado',
+    'project.requests.table.schoolName': 'Centro',
+    'project.requests.table.groupId': 'Grupo',
+    'project.requests.table.students': 'Alumnos',
+
+    'project.header.asignProjects.button': 'Asignar proyectos',
+    'project.projectInstances.Title': 'Proyectos asignados'
 }

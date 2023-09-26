@@ -2,6 +2,7 @@ package es.udc.stembach.backend.rest.dtos;
 
 import es.udc.stembach.backend.model.entities.Biennium;
 import es.udc.stembach.backend.model.entities.Project;
+import es.udc.stembach.backend.model.entities.ProjectInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +49,18 @@ public class ProjectConversor {
         return new ProjectDetailsDto(project.getId(), project.getTitle(), project.getDescription(), project.getObservations(),
                 project.getModality(), project.getUrl(), project.getOfferZone(), project.getRevised(), project.getActive(),
                 project.getMaxGroups(), project.getStudentsPerGroup(), toBienniumDto(project.getBiennium()), toUDCTeacherSummaryDto(project.getCreatedBy()), project.getAssigned());
+    }
+
+    public final static ProjectInstanceDto toProjectInstanceDto(ProjectInstance p){
+        return new ProjectInstanceDto(p.getId(), p.getTitle(), p.getDescription(), p.getObservations(), p.getModality(), p.getUrl(), p.getOfferZone(), p.getActive(), null, null, null);
+    }
+
+    public final static ProjectInstanceSummaryDto toProjectInstanceSummaryDto(ProjectInstance p){
+        return new ProjectInstanceSummaryDto(p.getId(), p.getTitle(), null);
+    }
+
+    public final static ProjectInstanceDetailsDto toProjectInstanceDetailsDto(ProjectInstance projectInstance){
+        return new ProjectInstanceDetailsDto(projectInstance.getId(), projectInstance.getTitle(), projectInstance.getDescription(), projectInstance.getObservations(), projectInstance.getModality(),
+                projectInstance.getUrl(), projectInstance.getOfferZone(), projectInstance.getActive(), toBienniumDto(projectInstance.getBiennium()), toUDCTeacherSummaryDto(projectInstance.getCreatedBy()), null, null);
     }
 }

@@ -10,26 +10,26 @@ const Projects = ({projectResults, bienniums}) => {
             <div className="table-responsive-sm">
                 <table className="table table-hover">
                     <thead className="thead-dark">
-                    <tr>
-                        <th scope="col" colSpan="2">
-                            <FormattedMessage id="project.projects.form.title"/>
-                        </th>
-                        <th scope="col">
-                            <FormattedMessage id="project.projects.form.modality"/>
-                        </th>
-                        <th scope="col">
-                            <FormattedMessage id="project.projects.form.offerZone"/>
-                        </th>
-                        <th scope="col">
-                            <FormattedMessage id="project.projects.sidebar.maxGroups"/>
-                        </th>
-                        <th scope="col">
-                            <FormattedMessage id="project.projects.sidebar.studentsPerGroup"/>
-                        </th>
-                        <th scope="col">
-                            <FormattedMessage id="project.projects.form.biennium"/>
-                        </th>
-                    </tr>
+                        <tr>
+                            <th scope="col" colSpan="2">
+                                <FormattedMessage id="project.projects.form.title"/>
+                            </th>
+                            <th scope="col">
+                                <FormattedMessage id="project.projects.form.modality"/>
+                            </th>
+                            <th scope="col">
+                                <FormattedMessage id="project.projects.form.offerZone"/>
+                            </th>
+                            <th scope="col">
+                                <FormattedMessage id="project.projects.sidebar.maxGroups"/>
+                            </th>
+                            <th scope="col">
+                                <FormattedMessage id="project.projects.sidebar.studentsPerGroup"/>
+                            </th>
+                            <th scope="col">
+                                <FormattedMessage id="project.projects.form.biennium"/>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
                     {projectResults.map(project =>

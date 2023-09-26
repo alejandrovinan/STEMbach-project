@@ -44,6 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.POST, "/projects/cancelProject").hasRole("STEMCOORDINATOR")
 			.antMatchers(HttpMethod.POST, "/projects/editProject").hasRole("UDCTEACHER")
 			.antMatchers(HttpMethod.POST, "/projects/requestProject").permitAll()
+			.antMatchers(HttpMethod.GET, "/projects/getAllProjectRequests/*").permitAll()
+			.antMatchers(HttpMethod.POST, "/projects/asignProjects").hasRole("STEMCOORDINATOR")
+			.antMatchers(HttpMethod.GET, "/projects/findProjectsInstancesSummary").hasAnyRole("STEMCOORDINATOR", "UDCTEACHER", "CENTERSTEMCOORDINATOR")
 			.anyRequest().denyAll();
 
 	}

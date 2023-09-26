@@ -8,6 +8,7 @@ export {default as ProjectDetails} from './components/ProjectDetails';
 export {default as ProjectSearch} from './components/ProjectSearch';
 export {default as FilerSidebar} from './components/FilterSidebar';
 export {default as Request} from './components/RequestForm';
+export {default as ProjectInstacesSearch} from './components/ProjectInstanceSearch';
 
 // eslint-disable-next-line
 export default {actions, actionTypes, reducer, selectors};

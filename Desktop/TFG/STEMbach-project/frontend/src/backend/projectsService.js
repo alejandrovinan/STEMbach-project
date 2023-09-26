@@ -44,3 +44,19 @@ export const requestProject = (students, projectId, schoolId, onSucces, onErrors
     appFetch('/projects/requestProject',
         config('POST', {students, projectId, schoolId}), onSucces, onErrors);
 
+export const viewRequests = ({id, page, size}, onSuccess) =>{
+
+    let path = `/projects/getAllProjectRequests/${id}?page=${page}&size=${size}`;
+
+    appFetch(path, config('GET'), onSuccess);
+}
+
+export const asignProjects = (onSuccess) => {
+    appFetch('/projects/asignProjects', config('POST'), onSuccess)
+}
+
+export const findProjectInstanceSummary = ({page, size, role}, onSuccess) => {
+    appFetch(`/projects/findProjectsInstancesSummary?page=${page}&size=${size}&role=${role}`,
+        config('GET'), onSuccess)
+}
+

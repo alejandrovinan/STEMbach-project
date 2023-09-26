@@ -3,7 +3,9 @@ import {Link} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
 
 import users from '../../users';
-import React from "react";
+import React, {useState} from "react";
+import * as actions from '../actions';
+import {Success} from "../../common";
 
 const Header = () => {
 
@@ -11,6 +13,10 @@ const Header = () => {
     const user = useSelector(users.selectors.getUser);
     const isStemCoordinator = user ? user.role === "STEMCOORDINATOR" : false;
     const isUDCTeacher = user ? user.role === "UDCTEACHER" : false;
+
+    const asignProjects = () => {
+        actions.asignProjects()
+    }
 
     return (
 
@@ -32,11 +38,18 @@ const Header = () => {
                         </Link>
                     </li>
                     {isStemCoordinator &&
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/users/Accounts">
-                            <FormattedMessage id="project.user.accounts.title"/>
-                        </Link>
-                    </li>}
+                        <div className="navbar-nav">
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/users/Accounts">
+                                    <FormattedMessage id="project.user.accounts.title"/>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <button className="nav-link" onClick={() => asignProjects()}>
+                                    <FormattedMessage id="project.header.asignProjects.button"/>
+                                </button>
+                            </li>
+                        </div>}
                     {isUDCTeacher &&
                     <li className="nav-item">
                         <Link className="nav-link" to="/projects/CreateProjects">
@@ -57,6 +70,9 @@ const Header = () => {
                             {userName}
                         </a>
                         <div className="dropdown-menu dropdown-menu-right">
+                            <Link className="dropdown-item" to="/projects/projectInstanceSearch">
+                                <FormattedMessage id="project.projectInstances.Title"/>
+                            </Link>
                             <Link className="dropdown-item" to="/users/change-password">
                                 <FormattedMessage id="project.users.ChangePassword.title"/>
                             </Link>

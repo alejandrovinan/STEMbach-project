@@ -6,8 +6,7 @@ import es.udc.stembach.backend.model.exceptions.InstanceNotFoundException;
 import es.udc.stembach.backend.model.exceptions.MaxStudentsInProjectException;
 import es.udc.stembach.backend.model.exceptions.StudentAlreadyInGroupException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -43,6 +43,12 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     RequestDao requestDao;
+
+    @Autowired
+    ProjectInstanceDao projectInstanceDao;
+
+    @Autowired
+    LeadsProjectInstanceDao leadsProjectInstanceDao;
 
     @Override
     public Project createProject(Project project, List<Long> udcTeacherIdList, Long bienniumId, Long creatorId) throws InstanceNotFoundException {
@@ -122,7 +128,7 @@ public class ProjectServiceImpl implements ProjectService{
                                                  Boolean active, Integer maxGroups, Integer studentsPerGroup,
                                                  String biennium, Boolean assigned, int size, int page) {
 
-        Slice<Project> projects= projectDao.findProjectListWithFilters(modality, offerZone, revised, active, maxGroups,
+        Slice<Project> projects = projectDao.findProjectListWithFilters(modality, offerZone, revised, active, maxGroups,
                                                                        studentsPerGroup, biennium, assigned, size, page);
 
         return new Block<>(projects.getContent(), projects.hasNext());
@@ -275,8 +281,78 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public List<Request> getAllProjectRequests(Long projectId) {
-        return null;
+    public Block<Request> getAllProjectRequests(Long projectId, int page, int size) {
+
+        boolean existMore = false;
+        Slice<Request> requests = requestDao.findAllByProjectId(projectId, page, size);
+
+        return new Block<>(requests.getContent(), requests.hasNext());
+    }
+
+    @Override
+    public void asignProjects() {
+        Random rand = new Random();
+        Iterable<Project> projects = projectDao.findAllByRevisedIsTrueAndActiveIsTrueAndAssignedIsFalse();
+        List<Request> projectRequests = new ArrayList<>();
+        List<LeadsProject> leadsProjects = new ArrayList<>();
+        Request request = null;
+        int randomNumber = 0;
+        ProjectInstance projectInstance = null;
+
+        for(Project p: projects){
+            projectRequests = requestDao.findAllByProjectId(p.getId());
+            for(int i = 0; (i < p.getMaxGroups() && i < projectRequests.size()); i++){
+                randomNumber = rand.nextInt(projectRequests.size());
+                request = projectRequests.get(randomNumber);
+
+                while(request.getStudentGroup().getHasProject() && projectRequests.size() != 0){
+                    projectRequests.remove(randomNumber);
+                    request = projectRequests.get(rand.nextInt(projectRequests.size()));
+                }
+
+            }
+
+            if(projectRequests.size() != 0){
+                request.getStudentGroup().setHasProject(true);
+                projectInstance = projectInstanceDao.save(
+                        new ProjectInstance(p.getTitle(), p.getDescription(), p.getObservations(), p.getModality(),
+                                p.getUrl(), p.getOfferZone(), p.getActive(), p.getBiennium(), p.getCreatedBy(), request.getStudentGroup())
+                );
+
+                leadsProjects = leadsProjectDao.findAllByProjectId(p.getId());
+                for(LeadsProject l: leadsProjects){
+                    leadsProjectInstanceDao.save(new LeadsProjectInstance(projectInstance, l.getUdcTeacher()));
+                }
+
+                p.setAssigned(true);
+            }
+        }
+    }
+
+    @Override
+    public Block<ProjectInstance> findProjectsInstances(Long id, User.RoleType roleType, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectInstance> projectInstances = null;
+
+        switch (roleType){
+            case CENTERSTEMCOORDINATOR -> projectInstances = projectInstanceDao.findAllProjectInstacesByCenterStemCoordinator(id, pageable);
+            case UDCTEACHER -> projectInstances = projectInstanceDao.findAllProjectInstancesByUdcTeacherLead(id, pageable);
+            case STEMCOORDINATOR -> projectInstances = projectInstanceDao.findAll(pageable);
+        }
+        return new Block<>(projectInstances.getContent(), projectInstances.hasNext());
+    }
+
+    @Override
+    public ProjectInstance findProjectInstanceDetails(Long projectInstanceId) throws InstanceNotFoundException {
+
+        Optional<ProjectInstance> projectInstance = projectInstanceDao.findById(projectInstanceId);
+
+        if(projectInstance.isEmpty()){
+            throw new InstanceNotFoundException("project.entities.projectInstance", projectInstanceId);
+        }
+
+        return projectInstance.get();
     }
 
 

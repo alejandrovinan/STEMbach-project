@@ -4,7 +4,7 @@ export default {
     'project.app.Footer.text': 'STEMBach project - Web created by Alejandro Viñán Bértoa',
     'project.app.Header.home': 'Home',
     'project.app.Header.logout': 'Logout',
-    'project.app.Home.welcome': 'Welcom to the STEMBach project main page',
+    'project.app.Home.welcome': 'Welcome to the STEMBach project main page',
 
     'project.common.ErrorDialog.title': 'Error',
 
@@ -94,7 +94,19 @@ export default {
     'project.projects.RequestForm.surname': 'Surname',
     'project.projects.RequestForm.secondSurname': 'Second surname',
     'project.projects.RequestForm.dni': 'ID',
-    'project.projects.RequestForm.requestProject': 'Request'
+    'project.projects.RequestForm.requestProject': 'Request',
+    'project.prijects.RequestForm.noStudents': 'Click the button "+" to add students',
+    'project.projects.projectDetails.viewRequests': 'Requests',
+    'project.projects.projectDetails.cancelViewRequests': 'Back',
+
+    'project.requests.table.status': 'Status',
+    'project.requests.table.schoolName': 'School',
+    'project.requests.table.groupId': 'Group',
+    'project.requests.table.students': 'Students',
+
+    'project.header.asignProjects.button': 'Assign projects',
+    'project.projectInstances.Title': 'Assigned projects'
+
 
 
 }

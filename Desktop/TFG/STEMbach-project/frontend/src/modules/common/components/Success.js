@@ -11,7 +11,7 @@ const Success = ({message, onClose}) => message && (
 );
 
 Success.propTypes = {
-    message: PropTypes.string,
+    message: PropTypes.object,
     onClose: PropTypes.func.isRequired
 };
 

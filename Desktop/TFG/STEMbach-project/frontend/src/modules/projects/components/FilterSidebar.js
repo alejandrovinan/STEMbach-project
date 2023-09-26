@@ -130,7 +130,7 @@ const FilterSidebar = () => {
                         </CDBSidebarMenuItem>
                     </CDBSidebarMenu>
                     <CDBSidebarFooter>
-                        {true ?
+                        {isStemCoordinator ?
                             <CDBSidebarMenuItem icon="fa-solid fa-check-double">
                                 <div className="form-check">
                                     <input className="form-check-input" type="checkbox" checked={revised} onChange={e => setRevised(e.target.checked)} id="revisedCheckBoxId"/>

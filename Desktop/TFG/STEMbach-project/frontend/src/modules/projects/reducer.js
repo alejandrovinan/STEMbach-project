@@ -8,7 +8,8 @@ const initialState = {
     projectResults: null,
     teacherSelectorList: null,
     bienniums: null,
-    request: null
+    requests: null,
+    projectInstancesResults: null
 };
 
 const projectDetails = (state = initialState.projectDetails, action) => {
@@ -43,6 +44,9 @@ const projectResults = (state = initialState.projectResults, action) => {
         case actionTypes.FIND_PROJECTS_BY_CRITERIA_COMPLETED:
             return action.projectResults;
 
+        case actionTypes.CLEAR_PROJECTS_SEARCH:
+            return initialState.projectResults;
+
         default:
             return initialState.projectResults
     }
@@ -69,11 +73,25 @@ const bienniums = (state = initialState.bienniums, action) => {
     }
 }
 
-const request = (state = initialState.request, action) =>{
+const requests = (state = initialState.requests, action) =>{
 
     switch (action.type) {
-        case actionTypes.CREATE_REQUEST_COMPLETED:
-            return action.request;
+        case actionTypes.VIEW_REQUESTS_COMPLETED:
+            return action.result;
+
+        default:
+            return state;
+    }
+}
+
+const projectInstancesResults = (state = initialState.projectInstancesResults, action) => {
+
+    switch (action.type){
+        case actionTypes.FIND_PROJECT_INSTANCES_SUMMARY_COMPLETED:
+            return action.result;
+
+        case actionTypes.CLEAR_PROJECT_INSTANCES_SUMMARY_COMPLETED:
+            return initialState.projectInstancesResults;
 
         default:
             return state;
@@ -85,7 +103,8 @@ const reducer = combineReducers({
     projectResults,
     teacherSelectorList,
     bienniums,
-    request
+    requests,
+    projectInstancesResults
 });
 
 export default reducer;

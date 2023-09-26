@@ -23,5 +23,6 @@ export const getBienniumName = (bienniums, id) => {
 
 export const getAllProjectResults = state => getModuleState(state).projectResults;
 
+export const getAllRequests = state => getModuleState(state).requests;
 
-export const getRequest = state => getModuleState(state).request;
+export const getAllProjectInstancesResults = state => getModuleState(state).projectInstancesResults;

@@ -1,6 +1,8 @@
 DROP TABLE LeadsProject;
 DROP TABLE Request;
 DROP TABLE Project;
+DROP TABLE LeadsProjectInstance;
+DROP TABLE ProjectInstance;
 DROP TABLE UDCTeacher;
 DROP TABLE STEMCoordinator;
 DROP TABLE Faculty;
@@ -162,5 +164,37 @@ CREATE TABLE Request (
                      REFERENCES Project(id),
     CONSTRAINT StudentGroupIdRequest FOREIGN KEY (studentGroupId)
                      REFERENCES StudentGroup(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE ProjectInstance (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    description VARCHAR(800) NOT NULL,
+    observations VARCHAR(800),
+    modality TINYINT NOT NULL,
+    url VARCHAR(100),
+    offerZone TINYINT NOT NULL,
+    active BIT NOT NULL,
+    bienniumId BIGINT NOT NULL,
+    udcTeacherId BIGINT NOT NULL,
+    studentGroupId BIGINT NOT NULL,
+    CONSTRAINT ProjectInstancePK PRIMARY KEY (id),
+    CONSTRAINT BienniumProjectInstanceFK FOREIGN KEY (bienniumId)
+                            REFERENCES Biennium(id),
+    CONSTRAINT UdcTeacherProjectInstanceFK FOREIGN KEY (udcTeacherId)
+                             REFERENCES UDCTeacher(id),
+    CONSTRAINT StudentGroupIdProjectInstanceFK FOREIGN KEY (studentGroupId)
+                             REFERENCES StudentGroup(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE LeadsProjectInstance (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    projectInstanceId BIGINT NOT NULL,
+    udcTeacherId BIGINT NOT NULL,
+    CONSTRAINT LeadsProjectInstancePK PRIMARY KEY (id),
+    CONSTRAINT ProjectInstanceLeadsProjectInstanceFK FOREIGN KEY (projectInstanceId)
+                                  REFERENCES ProjectInstance(id),
+    CONSTRAINT UdcTeacherLeadsProjectInstanceFK FOREIGN KEY (udcTeacherId)
+                                  REFERENCES UDCTeacher(id)
 ) ENGINE = InnoDB;
 

@@ -7,6 +7,7 @@ import {Login, SignUp, UpdateProfile, ChangePassword, Logout, Accounts, CreateAc
 import users from '../../users';
 import {CreateProjects, ProjectDetails, ProjectSearch} from "../../projects";
 import RequestForm from "../../projects/components/RequestForm";
+import ProjectInstanceSearch from "../../projects/components/ProjectInstanceSearch";
 
 const Body = () => {
 
@@ -14,6 +15,7 @@ const Body = () => {
     const user = useSelector(users.selectors.getUser);
     const isStemCoordinator = user ? user.role === "STEMCOORDINATOR" : false;
     const isUDCTeacher = user ? user.role === "UDCTEACHER" : false;
+    const isCenterStemCoordinator = user ? user.role === "CENTERSTEMCOORDINATOR" : false;
     
    return (
 
@@ -32,7 +34,8 @@ const Body = () => {
                 {loggedIn && (isUDCTeacher || isStemCoordinator) && <Route path="/projects/CreateProjects" element={<CreateProjects/>}/>}
                 <Route path="/projects/ProjectDetails/:id" element={<ProjectDetails/>}/>
                 <Route path="/projects/ProjectSearch" element={<ProjectSearch/>}/>
-                <Route path="/projects/:id/RequestProject" element={<RequestForm/>}/>
+                {loggedIn && isCenterStemCoordinator && <Route path="/projects/:id/RequestProject" element={<RequestForm/>}/>}
+                {loggedIn && <Route path="/projects/projectInstanceSearch" element={<ProjectInstanceSearch/>}/>}
             </Routes>
         </div>
 

@@ -20,7 +20,7 @@ const ProjectSearch = () => {
         }
 
         if(projectResults){
-            dispatch(actions.findProjectsByCriteria(projectResults.result.criteria));
+            dispatch(actions.findProjectsByCriteria(projectResults.criteria));
         }
 
         return () => dispatch(actions.clearProjectSearch());

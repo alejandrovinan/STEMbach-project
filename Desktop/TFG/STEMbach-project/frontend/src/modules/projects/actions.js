@@ -128,5 +128,44 @@ export const requestProject = (students, projectId, schoolId, onSucces, onErrors
                     },
         onErrors);
 
+const viewRequestsCompleted = result =>({
+    type: actionTypes.VIEW_REQUESTS_COMPLETED,
+    result
+})
+
+export const viewRequests = criteria => dispatch =>{
+    backend.projectsService.viewRequests(criteria,
+        result => dispatch(viewRequestsCompleted({criteria, result})));
+}
+
+export const previousViewRequests = criteria => dispatch => {
+    dispatch(viewRequests({...criteria, page: criteria.page - 1}));
+}
+
+export const nextViewRequests = criteria => dispatch => {
+    dispatch(viewRequests({...criteria, page: criteria.page + 1}));
+}
+
+const findProjectInstanceSummaryCompleted = result => ({
+    type: actionTypes.FIND_PROJECT_INSTANCES_SUMMARY_COMPLETED,
+    result
+})
+
+export const findProjectInstancesSummary = criteria => dispatch => {
+    backend.projectsService.findProjectInstanceSummary(criteria,
+        result => dispatch(findProjectInstanceSummaryCompleted({criteria, result})));
+}
+
+export const previousFindProjectInstancesSummary = criteria => dispatch => {
+    dispatch(findProjectInstancesSummary({...criteria, page: criteria.page - 1}));
+}
+
+export const nextFindProjectInstancesSummary = criteria => dispatch => {
+    dispatch(findProjectInstancesSummary({...criteria, page: criteria.page + 1}));
+}
+
+export const clearProjectInstancesSearch = () => ({
+    type: actionTypes.CLEAR_PROJECT_INSTANCES_SUMMARY_COMPLETED
+})
 
 
