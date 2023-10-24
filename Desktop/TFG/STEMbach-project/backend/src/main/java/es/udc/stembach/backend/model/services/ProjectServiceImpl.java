@@ -1,10 +1,7 @@
 package es.udc.stembach.backend.model.services;
 
 import es.udc.stembach.backend.model.entities.*;
-import es.udc.stembach.backend.model.exceptions.DuplicateInstanceException;
-import es.udc.stembach.backend.model.exceptions.InstanceNotFoundException;
-import es.udc.stembach.backend.model.exceptions.MaxStudentsInProjectException;
-import es.udc.stembach.backend.model.exceptions.StudentAlreadyInGroupException;
+import es.udc.stembach.backend.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -49,6 +46,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     LeadsProjectInstanceDao leadsProjectInstanceDao;
+
+    @Autowired
+    CenterHistoryDao centerHistoryDao;
 
     @Override
     public Project createProject(Project project, List<Long> udcTeacherIdList, Long bienniumId, Long creatorId) throws InstanceNotFoundException {
@@ -124,12 +124,21 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional(readOnly = true)
+    public Block<Project> findAllProjects(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Project> projects = projectDao.findAll(pageable);
+
+        return new Block<>(projects.getContent(), projects.hasNext());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Block<Project> findProjectsByCriteria(Project.Modality modality, Project.OfferZone offerZone, Boolean revised,
                                                  Boolean active, Integer maxGroups, Integer studentsPerGroup,
-                                                 String biennium, Boolean assigned, int size, int page) {
+                                                 String biennium, Boolean assigned, List<Long> teachers, String title, int size, int page) {
 
         Slice<Project> projects = projectDao.findProjectListWithFilters(modality, offerZone, revised, active, maxGroups,
-                                                                       studentsPerGroup, biennium, assigned, size, page);
+                                                                       studentsPerGroup, biennium, assigned, teachers, title, size, page);
 
         return new Block<>(projects.getContent(), projects.hasNext());
     }
@@ -314,6 +323,7 @@ public class ProjectServiceImpl implements ProjectService{
 
             if(projectRequests.size() != 0){
                 request.getStudentGroup().setHasProject(true);
+                request.setStatus(Request.requestStatus.ASSIGNED);
                 projectInstance = projectInstanceDao.save(
                         new ProjectInstance(p.getTitle(), p.getDescription(), p.getObservations(), p.getModality(),
                                 p.getUrl(), p.getOfferZone(), p.getActive(), p.getBiennium(), p.getCreatedBy(), request.getStudentGroup())
@@ -355,5 +365,98 @@ public class ProjectServiceImpl implements ProjectService{
         return projectInstance.get();
     }
 
+    @Override
+    @Transactional(readOnly=true)
+    public List<UDCTeacher> findUdcTeachersOfProjectInstance(Long projectId) {
+        return leadsProjectInstanceDao.findAllTeachersByProject(projectId);
+    }
+
+    @Override
+    public CenterSTEMCoordinator findCoordinatorOfSchool(Long schoolId) throws InstanceNotFoundException {
+        Optional<CenterHistory> centerHistory = centerHistoryDao.findBySchoolIdAndEndDateIsNull(schoolId);
+
+        if(centerHistory.isEmpty()){
+            throw new InstanceNotFoundException("project.entities.centerHistory", schoolId);
+        }
+
+        return centerHistory.get().getCenterSTEMCoordinator();
+    }
+
+    @Override
+    public ProjectInstance editProjectInstance(ProjectInstance project, List<Long> udcTeacherIdList, List<Student> students, Long bienniumId) throws InstanceNotFoundException, EmptyStudentForProjectException {
+
+        Optional<Biennium> biennium = bienniumDao.findById(bienniumId);
+
+        if(biennium.isEmpty()){
+            throw new InstanceNotFoundException("project.entities.biennium", bienniumId);
+        }
+
+        Optional<ProjectInstance> projectInstance = projectInstanceDao.findById(project.getId());
+
+        if(projectInstance.isEmpty()){
+            throw new InstanceNotFoundException("project.entities.projectInstance", project.getId());
+        }
+
+        projectInstance.get().setTitle(project.getTitle());
+        projectInstance.get().setDescription(project.getDescription());
+        projectInstance.get().setObservations(project.getObservations());
+        projectInstance.get().setModality(project.getModality());
+        projectInstance.get().setUrl(project.getUrl());
+        projectInstance.get().setOfferZone(project.getOfferZone());
+        projectInstance.get().setBiennium(biennium.get());
+
+        List<LeadsProjectInstance> leadsProjectInstances = leadsProjectInstanceDao.findAllByProjectInstanceId(projectInstance.get().getId());
+        List<Long> oldUDCTeacherListId = new ArrayList<>();
+
+        for(LeadsProjectInstance l: leadsProjectInstances){
+            if(!udcTeacherIdList.contains(l.getUdcTeacher().getId())){
+                leadsProjectInstanceDao.delete(l);
+            } else {
+                oldUDCTeacherListId.add(l.getUdcTeacher().getId());
+            }
+        }
+
+        for(Long id: udcTeacherIdList){
+            if(!oldUDCTeacherListId.contains(id)){
+                Optional<UDCTeacher> udcTeacherTemp = udcTeacherDao.findById(id);
+                if(udcTeacherTemp.isEmpty()){
+                    throw new InstanceNotFoundException("project.entities.udcteacher", id);
+                }
+
+                leadsProjectInstanceDao.save(new LeadsProjectInstance(projectInstance.get(), udcTeacherTemp.get()));
+                oldUDCTeacherListId.add(id);
+            }
+        }
+
+        if(students.size() <= 0){
+            throw new EmptyStudentForProjectException(projectInstance.get().getId());
+        }
+
+        Iterable<Student> studentsIterable = studentDao.findByStudentGroupId(project.getStudentGroup().getId());
+        Optional<StudentGroup> studentGroup = studentGroupDao.findById(project.getStudentGroup().getId());
+
+        for(Student s: studentsIterable){
+            boolean found = false;
+            for(Student student : students){
+                if(s.getDni().equals(student.getDni())){
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                studentDao.delete(s);
+            }
+        }
+
+        for(Student s: students){
+            Optional<Student> student = studentDao.findByDni(s.getDni());
+            if(student.isEmpty()){
+                studentDao.save(new Student(s.getName(), s.getSurname(), s.getSecondSurname(), s.getRole(), project.getStudentGroup(),
+                        studentGroup.get().getSchool(), s.getDni()));
+            }
+        }
+
+        return projectInstance.get();
+    }
 
 }

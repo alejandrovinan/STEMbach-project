@@ -1,7 +1,6 @@
 import {combineReducers} from 'redux';
 
 import * as actionTypes from './actionTypes';
-import {act} from "react-dom/test-utils";
 
 const initialState = {
     projectDetails: null,
@@ -9,7 +8,8 @@ const initialState = {
     teacherSelectorList: null,
     bienniums: null,
     requests: null,
-    projectInstancesResults: null
+    projectInstancesResults: null,
+    projectInstanceDetails: null
 };
 
 const projectDetails = (state = initialState.projectDetails, action) => {
@@ -98,13 +98,28 @@ const projectInstancesResults = (state = initialState.projectInstancesResults, a
     }
 }
 
+const projectInstanceDetails = (state = initialState.projectInstanceDetails, action) => {
+    switch (action.type){
+
+        case actionTypes.FIND_PROJECT_INSTANCE_DETAILS_COMPLETED:
+            return action.projectInstanceDetails;
+
+        case actionTypes.EDIT_PROJECT_INSTANCE_COMPLETED:
+            return action.projectInstanceDetails;
+
+        default:
+            return state;
+    }
+}
+
 const reducer = combineReducers({
     projectDetails,
     projectResults,
     teacherSelectorList,
     bienniums,
     requests,
-    projectInstancesResults
+    projectInstancesResults,
+    projectInstanceDetails
 });
 
 export default reducer;

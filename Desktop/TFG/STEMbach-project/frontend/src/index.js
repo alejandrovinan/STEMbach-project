@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/solid.css';
+import 'react-datepicker/dist/react-datepicker.css'
 
 import store from './store';
 import {App} from './modules/app';

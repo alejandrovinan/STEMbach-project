@@ -1,13 +1,7 @@
 package es.udc.stembach.backend.rest.controllers;
 
-import es.udc.stembach.backend.model.entities.Project;
-import es.udc.stembach.backend.model.entities.ProjectInstance;
-import es.udc.stembach.backend.model.entities.Request;
-import es.udc.stembach.backend.model.entities.User;
-import es.udc.stembach.backend.model.exceptions.DuplicateInstanceException;
-import es.udc.stembach.backend.model.exceptions.InstanceNotFoundException;
-import es.udc.stembach.backend.model.exceptions.MaxStudentsInProjectException;
-import es.udc.stembach.backend.model.exceptions.StudentAlreadyInGroupException;
+import es.udc.stembach.backend.model.entities.*;
+import es.udc.stembach.backend.model.exceptions.*;
 import es.udc.stembach.backend.model.services.Block;
 import es.udc.stembach.backend.model.services.ProjectService;
 import es.udc.stembach.backend.model.services.UserService;
@@ -111,6 +105,12 @@ public class ProjectController {
         return projectDetailsDto;
     }
 
+    @GetMapping("/findAllProjects")
+    public BlockDto<ProjectSummaryDto> findAllProjects(@RequestParam(defaultValue = "0") int page){
+        Block<Project> projectBlock = projectService.findAllProjects(page, 2);
+        return new BlockDto<>(toProjectSummaryDtos(projectBlock.getItems()), projectBlock.getExistMoreItems());
+    }
+
     @GetMapping("/findByCriteria")
     public BlockDto<ProjectSummaryDto> findProjectsByCriteria(
             @RequestParam(required = false) Project.Modality modality,
@@ -121,10 +121,12 @@ public class ProjectController {
             @RequestParam(required = false) Integer studentsPerGroup,
             @RequestParam(required = false) String biennium,
             @RequestParam(required = false) Boolean assigned,
+            @RequestParam(required = false) List<Long> teachers,
+            @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page){
 
         Block<Project> projectBlock = projectService.findProjectsByCriteria(modality, offerZone, revised, active,
-                maxGroups, studentsPerGroup, biennium, assigned, 2, page);
+                maxGroups, studentsPerGroup, biennium, assigned, teachers, title, 2, page);
         return new BlockDto<>(toProjectSummaryDtos(projectBlock.getItems()), projectBlock.getExistMoreItems());
     }
 
@@ -202,9 +204,31 @@ public class ProjectController {
         ProjectInstance projectInstance = projectService.findProjectInstanceDetails(id);
         ProjectInstanceDetailsDto projectInstanceDetailsDto = toProjectInstanceDetailsDto(projectInstance);
         projectInstanceDetailsDto.setStudents(toStudentDtos(userService.findAllStudentsOfGroup(projectInstance.getStudentGroup().getId())));
-        List<UDCTeacherSummaryDto> udcTeacherSummaryDtos = toUDCTeacherSummaryDtos(projectService.findUdcTeachersOfProject(id));
+        List<UDCTeacherSummaryDto> udcTeacherSummaryDtos = toUDCTeacherSummaryDtos(projectService.findUdcTeachersOfProjectInstance(id));
+        projectInstanceDetailsDto.setTeacherList(udcTeacherSummaryDtos);
+        projectInstanceDetailsDto.setCenterSTEMCoordinator(toUserDto(projectService.findCoordinatorOfSchool(projectInstance.getStudentGroup().getSchool().getId())));
+        projectInstanceDetailsDto.getCenterSTEMCoordinator().setPassword(null);
+        return projectInstanceDetailsDto;
+    }
 
-        //buscar profesores y alumnos y asignarlos
+    @PostMapping("/editProjectInstance")
+    public ProjectInstanceDetailsDto editProjectInstance(@RequestAttribute Long userId,
+                                                         @RequestBody ProjectInstanceModDto p) throws InstanceNotFoundException, EmptyStudentForProjectException {
+
+
+        ProjectInstance projectInstance = projectService.editProjectInstance(
+                new ProjectInstance(p.getId(), p.getTitle(), p.getDescription(), p.getObservations(), p.getModality(), p.getUrl(), p.getOfferZone(), null, null, null, new StudentGroup(p.getStudentGroup().getId(), p.getStudentGroup().getHasProject(), null)),
+                p.getTeacherIds(),
+                toStudentList(p.getStudents()),
+                p.getBienniumId()
+        );
+        ProjectInstanceDetailsDto projectInstanceDetailsDto = toProjectInstanceDetailsDto(projectInstance);
+
+        projectInstanceDetailsDto.setStudents(toStudentDtos(userService.findAllStudentsOfGroup(projectInstance.getStudentGroup().getId())));
+        List<UDCTeacherSummaryDto> udcTeacherSummaryDtos = toUDCTeacherSummaryDtos(projectService.findUdcTeachersOfProjectInstance(p.getId()));
+        projectInstanceDetailsDto.setTeacherList(udcTeacherSummaryDtos);
+        projectInstanceDetailsDto.setCenterSTEMCoordinator(toUserDto(projectService.findCoordinatorOfSchool(projectInstance.getStudentGroup().getSchool().getId())));
+        projectInstanceDetailsDto.getCenterSTEMCoordinator().setPassword(null);
         return projectInstanceDetailsDto;
     }
 }

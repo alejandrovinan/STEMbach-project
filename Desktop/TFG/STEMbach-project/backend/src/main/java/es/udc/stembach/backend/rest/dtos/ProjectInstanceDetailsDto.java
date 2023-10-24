@@ -22,6 +22,7 @@ public class ProjectInstanceDetailsDto {
     private UDCTeacherSummaryDto createdBy;
     private List<StudentDto> students;
     private List<UDCTeacherSummaryDto> teacherList;
+    private UserDto centerSTEMCoordinator;
 
     public ProjectInstanceDetailsDto() {
     }

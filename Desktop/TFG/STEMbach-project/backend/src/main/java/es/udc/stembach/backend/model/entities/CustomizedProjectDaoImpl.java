@@ -14,16 +14,30 @@ public class CustomizedProjectDaoImpl implements CustomizedProjectDao{
     @PersistenceContext
     private EntityManager entityManager;
 
+    private String[] getTokens(String keywords) {
+
+        if (keywords == null || keywords.length() == 0) {
+            return new String[0];
+        } else {
+            return keywords.split("\\s");
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public Slice<Project> findProjectListWithFilters(Project.Modality modality, Project.OfferZone offerZone, Boolean revised,
                                                      Boolean active, Integer maxGroups, Integer studentsPerGroup, String biennium,
-                                                     Boolean assigned, int size, int page) {
+                                                     Boolean assigned, List<Long> teachers, String title, int size, int page) {
 
-        String queryString = "SELECT p FROM Project p " +
+        String[] tokens = getTokens(title);
+
+        String queryString = "SELECT NEW es.udc.stembach.backend.model.entities.Project(p.id, p.title, p.description, p.observations, p.modality, p.url, p.offerZone, p.revised, p.active, p.maxGroups, p.studentsPerGroup, p.biennium, p.createdBy, p.assigned) FROM Project p " +
+                             "JOIN LeadsProject l " +
+                             "ON p.id = l.project.id " +
                              "WHERE p.revised = :revised " +
                              "AND p.active = :active " +
-                             "AND p.assigned = :assigned";
+                             "AND p.assigned = :assigned ";
 
         if(modality != null){
             queryString += "AND p.modality = :modality ";
@@ -42,7 +56,22 @@ public class CustomizedProjectDaoImpl implements CustomizedProjectDao{
         }
 
         if(biennium != null){
-            queryString += "AND p.biennium = :biennium";
+            queryString += "AND p.biennium = :biennium ";
+        }
+
+        if(teachers != null){
+            queryString += "AND l.udcTeacher.id IN :teachers ";
+        }
+
+        if (tokens.length != 0) {
+            queryString += "AND ";
+
+            for (int i = 0; i<tokens.length-1; i++) {
+                queryString += "LOWER(p.title) LIKE LOWER(:token" + i + ") AND ";
+            }
+
+            queryString += "LOWER(p.title) LIKE LOWER(:token" + (tokens.length-1) + ")";
+
         }
 
         Query query = entityManager.createQuery(queryString).setFirstResult(page*size).setMaxResults(size+1);
@@ -68,6 +97,17 @@ public class CustomizedProjectDaoImpl implements CustomizedProjectDao{
 
         if(biennium != null){
             query.setParameter("biennium", biennium);
+        }
+
+        if(teachers != null){
+            query.setParameter("teachers", teachers);
+        }
+
+        if (tokens.length != 0) {
+            for (int i = 0; i<tokens.length; i++) {
+                query.setParameter("token" + i, '%' + tokens[i] + '%');
+            }
+
         }
 
         List<Project> projects = query.getResultList();

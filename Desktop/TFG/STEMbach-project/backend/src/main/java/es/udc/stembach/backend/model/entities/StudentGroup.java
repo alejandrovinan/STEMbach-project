@@ -15,6 +15,12 @@ public class StudentGroup {
     public StudentGroup() {
     }
 
+    public StudentGroup(Long id, Boolean hasProject, School school) {
+        this.id = id;
+        this.hasProject = hasProject;
+        this.school = school;
+    }
+
     public StudentGroup(Boolean hasProject, School school) {
         this.hasProject = hasProject;
         this.school = school;

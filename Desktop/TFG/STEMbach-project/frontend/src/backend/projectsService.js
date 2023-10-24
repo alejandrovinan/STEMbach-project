@@ -12,7 +12,10 @@ export const findAllBienniums = (onSuccess) =>
 export const findProjectDetails = (id, onSuccess) =>
     appFetch(`/projects/projectDetails/${id}`, config('GET'), onSuccess);
 
-export const findProjectsByCriteria = ({modality, offerZone, revised, active, maxGroups, studentsPerGroup, biennium, assigned, page}, onSuccess) =>{
+export const findAllProjects = ({page}, onSuccess) =>
+    appFetch(`/projects/findAllProjects?page=${page}`, config('GET'), onSuccess);
+
+export const findProjectsByCriteria = ({modality, offerZone, revised, active, maxGroups, studentsPerGroup, biennium, assigned, teachers, title, page}, onSuccess) =>{
 
     let path = `/projects/findByCriteria?page=${page}`;
 
@@ -24,6 +27,12 @@ export const findProjectsByCriteria = ({modality, offerZone, revised, active, ma
     path += studentsPerGroup ? `&studentsPerGroups=${studentsPerGroup}` : "";
     path += biennium ? `&biennium=${biennium}` : "";
     path += `&assigned=${assigned}`;
+
+    if(teachers && teachers.length > 0){
+        path += `&teachers=${teachers.join(',')}`;
+    }
+
+    path += title ? `&title=${title}` : "";
 
     appFetch(path, config('GET'), onSuccess);
 }
@@ -59,4 +68,12 @@ export const findProjectInstanceSummary = ({page, size, role}, onSuccess) => {
     appFetch(`/projects/findProjectsInstancesSummary?page=${page}&size=${size}&role=${role}`,
         config('GET'), onSuccess)
 }
+
+export const findProjectInstanceDetails = (id, onSuccess) =>
+    appFetch(`/projects/projectInstanceDetails/${id}`, config('GET'), onSuccess);
+
+export const editProjectInstance = (id, title, description, observations, modality, url, offerZone, bienniumId, teacherIds, students, studentGroup, onSuccess, onErrors) =>
+    appFetch('/projects/editProjectInstance',
+        config('POST', {id, title, description, observations, modality, url, offerZone, bienniumId, teacherIds, students, studentGroup}),
+        onSuccess, onErrors);
 

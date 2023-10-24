@@ -80,6 +80,8 @@ export default {
     'project.projects.sidebar.clearFilter': 'Clear filter',
     'project.projects.sidebar.applyFilter': 'Apply filter',
 
+    'project.projects.projectSearch.title': 'Project search',
+
     'project.projects.projectDetails.reviseButton': 'Aprove project',
     'project.projects.projectDetails.editButton': 'Edit project',
     'project.projects.projectDetails.dropProject': 'Cancel project',
@@ -90,6 +92,7 @@ export default {
     'project.projects.projectDetails.cancelEditButton': 'Cancel',
 
     'project.projects.RequestForm.title': 'Request project',
+    'project.projects.Requests.title': 'Project requests',
     'project.projects.RequestForm.name': 'Name',
     'project.projects.RequestForm.surname': 'Surname',
     'project.projects.RequestForm.secondSurname': 'Second surname',
@@ -105,7 +108,14 @@ export default {
     'project.requests.table.students': 'Students',
 
     'project.header.asignProjects.button': 'Assign projects',
-    'project.projectInstances.Title': 'Assigned projects'
+    'project.projectInstances.Title': 'Assigned projects',
+
+    'project.defenses.CreateDefense.title': 'Create defense',
+    'project.defenses.CreateDefense.form.date': 'Date',
+    'project.defenses.CreateDefense.form.mark': 'Mark',
+    'project.defenses.CreateDefense.form.place': 'Place',
+    'project.defenses.CreateDefense.form.observations': 'Observations',
+    'project.defenses.CreateDefense.form.judges': 'Judges'
 
 
 

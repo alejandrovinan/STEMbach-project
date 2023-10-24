@@ -5,9 +5,10 @@ import AppGlobalComponents from './AppGlobalComponents';
 import Home from './Home';
 import {Login, SignUp, UpdateProfile, ChangePassword, Logout, Accounts, CreateAccounts} from '../../users';
 import users from '../../users';
-import {CreateProjects, ProjectDetails, ProjectSearch} from "../../projects";
+import {CreateProjects, ProjectDetails, ProjectInstanceDetails, ProjectSearch} from "../../projects";
 import RequestForm from "../../projects/components/RequestForm";
 import ProjectInstanceSearch from "../../projects/components/ProjectInstanceSearch";
+import {CreateDefense} from "../../defenses";
 
 const Body = () => {
 
@@ -36,6 +37,8 @@ const Body = () => {
                 <Route path="/projects/ProjectSearch" element={<ProjectSearch/>}/>
                 {loggedIn && isCenterStemCoordinator && <Route path="/projects/:id/RequestProject" element={<RequestForm/>}/>}
                 {loggedIn && <Route path="/projects/projectInstanceSearch" element={<ProjectInstanceSearch/>}/>}
+                <Route path="/defenses/createDefense" element={<CreateDefense/>}/>
+                <Route path="/projects/ProjectInstanceDetails/:id" element={<ProjectInstanceDetails/>}/>
             </Routes>
         </div>
 

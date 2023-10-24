@@ -69,6 +69,7 @@ const findProjectsByCriteriaCompleted = projectResults => ({
     projectResults
 });
 
+
 export const findProjectsByCriteria = criteria => dispatch => {
     dispatch(clearProjectSearch());
     backend.projectsService.findProjectsByCriteria(criteria,
@@ -168,4 +169,26 @@ export const clearProjectInstancesSearch = () => ({
     type: actionTypes.CLEAR_PROJECT_INSTANCES_SUMMARY_COMPLETED
 })
 
+const findProjectInstanceDetailsCompleted = projectInstanceDetails => ({
+    type: actionTypes.FIND_PROJECT_INSTANCE_DETAILS_COMPLETED,
+    projectInstanceDetails
+});
 
+export const findProjectInstanceDetails = id => dispatch => {
+    backend.projectsService.findProjectInstanceDetails(id,
+        projectInstanceDetails => dispatch(findProjectInstanceDetailsCompleted(projectInstanceDetails)));
+};
+
+const editProjectInstanceCompleted = projectInstanceDetails => ({
+    type: actionTypes.EDIT_PROJECT_INSTANCE_COMPLETED,
+    projectInstanceDetails
+})
+
+export const editProjectInstance = (id, title, description, observations, modality, url, offerZone, bienniumId, teacherIds, students, studentGroup, onSucess, onErrors) => dispatch => {
+    backend.projectsService.editProjectInstance(id, title, description, observations, modality, url, offerZone, bienniumId, teacherIds, students, studentGroup,
+        projectInstanceDetails =>{
+            dispatch(editProjectInstanceCompleted(projectInstanceDetails));
+            onSucess();
+        },
+        onErrors);
+}

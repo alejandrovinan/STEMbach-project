@@ -14,6 +14,7 @@ import * as selectors from "../selectors";
 import * as actions from '../actions';
 import {act} from "react-dom/test-utils";
 import {useNavigate} from "react-router-dom";
+import Select from "react-select";
 
 const FilterSidebar = () => {
 
@@ -25,18 +26,41 @@ const FilterSidebar = () => {
     const [studentsPerGroups, setStudentsPerGroup] = useState('');
     const [biennium, setBiennium] = useState('');
     const [assigned, setAssigned] = useState(false);
+    const [teacherIds, setTeacherIds] = useState([]);
+    const [teachersSelectorHolder, setTeachersSelectorHolder] = useState([]);
+    const [title, setTitle] = useState();
 
     const navigate = useNavigate();
+    const teachers = useSelector(selectors.getTeacherSelectorList);
     const bienniums = useSelector(selectors.getAllBienniums);
     const dispatch = useDispatch();
     const user = useSelector(users.selectors.getUser);
     const isStemCoordinator = user ? user.role === "STEMCOORDINATOR" : false;
 
+    const options = [];
+
     useEffect(() => {
+
+        if(teachers === null){
+            dispatch(actions.findAllTeachers());
+        }
+
         if(bienniums === null){
             dispatch(actions.findAllBienniums());
         }
     });
+
+    if(teachers !== null){
+        teachers.forEach(t => options.push(
+            {value: t.id,
+                label: t.name + " " + t.surname + " " + t.secondSurname}
+        ));}
+
+    const handleChange = (selectedOptions) => {
+        setTeachersSelectorHolder(selectedOptions);
+        setTeacherIds([]);
+        selectedOptions.forEach(o => {setTeacherIds(teacherIds.concat(o.value))})
+    }
 
     const clearFilters = () => {
         setModality("");
@@ -47,6 +71,9 @@ const FilterSidebar = () => {
         setBiennium("");
         setAssigned(false);
         setRevised(true);
+        setTeachersSelectorHolder([]);
+        setTeacherIds([]);
+        setTitle("");
     }
 
     const findProjects = event => {
@@ -61,6 +88,8 @@ const FilterSidebar = () => {
                 studentsPerGroup: studentsPerGroups,
                 biennium: biennium,
                 assigned:assigned,
+                teachers: teacherIds,
+                title: title,
                 page: 0
             }
         ));
@@ -77,6 +106,18 @@ const FilterSidebar = () => {
                 </CDBSidebarHeader>
                 <CDBSidebarContent className="sidebar-content">
                     <CDBSidebarMenu>
+                        <CDBSidebarMenuItem>
+                            <FormattedMessage id="project.projects.form.teachers"/>
+                        </CDBSidebarMenuItem>
+                        <Select isMulti={true} options={options} onChange={handleChange}
+                                value={teachersSelectorHolder} className="form-select"/>
+                        <br/>
+                        <CDBSidebarMenuItem>
+                            <FormattedMessage id="project.projects.form.title"/>
+                            <input type="text" id="title" className="form-control" value={title}
+                                   onChange={e => setTitle(e.target.value)}/>
+                        </CDBSidebarMenuItem>
+                        <br/>
                         <CDBSidebarMenuItem icon="fa-duotone fa-shop">
                             <FormattedMessage id="project.projects.form.modality"/>
                             <select name="modality" id="modalitySelector" className="form-select" onChange={e => setModality(e.target.value)} value={modality}>

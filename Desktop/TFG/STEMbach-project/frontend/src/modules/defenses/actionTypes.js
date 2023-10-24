@@ -1,0 +1,1 @@
+export const CREATE_DEFENSE_COMPLETED= "/project/defenses/createDefenseCompleted";

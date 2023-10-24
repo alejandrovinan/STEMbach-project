@@ -21,6 +21,11 @@ const ProjectSearch = () => {
 
         if(projectResults){
             dispatch(actions.findProjectsByCriteria(projectResults.criteria));
+        } else {
+            dispatch(actions.findProjectsByCriteria({revised: true,
+                                                            active:true,
+                                                            assigned:false,
+                                                            page: 0}));
         }
 
         return () => dispatch(actions.clearProjectSearch());

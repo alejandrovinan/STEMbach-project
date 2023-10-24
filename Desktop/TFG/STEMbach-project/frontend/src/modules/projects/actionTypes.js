@@ -12,3 +12,5 @@ export const CREATE_REQUEST_COMPLETED= "/project/projects/createRequestCompleted
 export const VIEW_REQUESTS_COMPLETED= "/project/projects/viewRequestsCompleted";
 export const FIND_PROJECT_INSTANCES_SUMMARY_COMPLETED= "/project/projects/findProjectInstancesSummaryCompleted";
 export const CLEAR_PROJECT_INSTANCES_SUMMARY_COMPLETED= "/project/projects/clearProjectInstancesSummaryCompleted";
+export const FIND_PROJECT_INSTANCE_DETAILS_COMPLETED= "/project/projects/findProjectInstanceDetailsCompleted";
+export const EDIT_PROJECT_INSTANCE_COMPLETED="/project/projects/editProjectInstanceCompleted";

@@ -198,3 +198,36 @@ CREATE TABLE LeadsProjectInstance (
                                   REFERENCES UDCTeacher(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE Defense (
+     id BIGINT NOT NULL AUTO_INCREMENT,
+     place VARCHAR(300),
+     date DATETIME NOT NULL,
+     mark DECIMAL(11, 2),
+     observations VARCHAR(500),
+     CONSTRAINT DefensePK PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE RecordFile (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    fileName VARCHAR(255),
+    fileData LONGBLOB NOT NULL,
+    fileSize BIGINT NOT NULL,
+    uploadDate DATETIME NOT NULL,
+    fileType VARCHAR(30) NOT NULL,
+    defenseId BIGINT NOT NULL,
+    CONSTRAINT RecordFilePK PRIMARY KEY (id),
+    CONSTRAINT RecordFileDefenseFK FOREIGN KEY (defenseId)
+                        REFERENCES Defense (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE Judges (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    udcTeacherId BIGINT NOT NULL,
+    defenseId BIGINT NOT NULL,
+    CONSTRAINT JudgesPK PRIMARY KEY (id),
+    CONSTRAINT JudgesUdcTeacherFK FOREIGN KEY (udcTeacherId)
+                    REFERENCES UDCTeacher (id),
+    CONSTRAINT JudgesDefenseFK FOREIGN KEY (defenseId)
+                    REFERENCES Defense (id)
+) ENGINE = InnoDB;
+

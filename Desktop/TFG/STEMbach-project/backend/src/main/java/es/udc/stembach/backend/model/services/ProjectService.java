@@ -1,10 +1,7 @@
 package es.udc.stembach.backend.model.services;
 
 import es.udc.stembach.backend.model.entities.*;
-import es.udc.stembach.backend.model.exceptions.DuplicateInstanceException;
-import es.udc.stembach.backend.model.exceptions.InstanceNotFoundException;
-import es.udc.stembach.backend.model.exceptions.MaxStudentsInProjectException;
-import es.udc.stembach.backend.model.exceptions.StudentAlreadyInGroupException;
+import es.udc.stembach.backend.model.exceptions.*;
 
 import java.util.List;
 
@@ -19,9 +16,11 @@ public interface ProjectService {
 
     public Project findProjectDetails(Long projectId) throws InstanceNotFoundException;
 
+    public Block<Project> findAllProjects(int page, int size);
+
     public Block<Project> findProjectsByCriteria(Project.Modality modality, Project.OfferZone offerZone, Boolean revised,
                                                  Boolean active, Integer maxGroups, Integer studentsPerGroup, String biennium,
-                                                 Boolean assigned, int size, int page);
+                                                 Boolean assigned, List<Long> teachers, String title, int size, int page);
 
     public void approveProject(Long projectId) throws InstanceNotFoundException;
 
@@ -38,4 +37,10 @@ public interface ProjectService {
     public Block<ProjectInstance> findProjectsInstances(Long id, User.RoleType roleType, int page, int size);
 
     public ProjectInstance findProjectInstanceDetails(Long projectInstanceId) throws InstanceNotFoundException;
+
+    public List<UDCTeacher> findUdcTeachersOfProjectInstance(Long projectId);
+
+    public CenterSTEMCoordinator findCoordinatorOfSchool(Long schoolId) throws InstanceNotFoundException;
+
+    public ProjectInstance editProjectInstance(ProjectInstance project, List<Long> udcTeacherIdList, List<Student> students, Long bienniumId) throws InstanceNotFoundException, EmptyStudentForProjectException;
 }

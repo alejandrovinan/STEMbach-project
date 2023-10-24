@@ -2,6 +2,8 @@ const getModuleState = state => state.projects;
 
 export const getProjectDetails = state => getModuleState(state).projectDetails;
 
+export const getProjectInstanceDetails = state => getModuleState(state).projectInstanceDetails;
+
 export const getTeacherSelectorList = state => getModuleState(state).teacherSelectorList;
 
 export const getAllBienniums = state => getModuleState(state).bienniums;

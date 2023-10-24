@@ -7,6 +7,10 @@ const Projects = ({projectResults, bienniums}) => {
 
     return(
         <div className="col-md-9">
+            <h5 className="card-header text-center">
+                <FormattedMessage id="project.projects.projectSearch.title"/>
+            </h5>
+            <br/>
             <div className="table-responsive-sm">
                 <table className="table table-hover">
                     <thead className="thead-dark">

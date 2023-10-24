@@ -257,6 +257,6 @@ public class UserServiceImpl implements UserService {
 			throw new InstanceNotFoundException("project.users.centerhistory", centerStemCoordinatorId);
 		}
 
-		return centerHistoryOptional.get().getId();
+		return centerHistoryOptional.get().getSchool().getId();
 	}
 }
