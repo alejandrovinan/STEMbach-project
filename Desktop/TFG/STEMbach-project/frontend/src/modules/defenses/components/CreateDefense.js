@@ -7,11 +7,14 @@ import * as projectSelectors from "../../projects/selectors";
 import Select from "react-select";
 import * as projectActions from "../../projects/actions";
 import * as actions from "../actions";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import DefenseDetails from "./DefenseDetails";
 
 
 const CreateDefense = () => {
 
+    const {id} = useParams();
+    const projectId = Number(id);
     const [backendErrors, setBackendErrors] = useState(null);
     const [date, setDate] = useState(new Date());
     const [place, setPlace] = useState("");
@@ -32,6 +35,7 @@ const CreateDefense = () => {
         if(teachers === null){
             dispatch(projectActions.findAllTeachers());
         }
+
     });
 
     if(teachers !== null){
@@ -67,21 +71,20 @@ const CreateDefense = () => {
         formData.append("mark", mark ? mark : "");
         formData.append("observations", observations);
 
-        for(let i =0; i < files.length; i++){
-            formData.append("recordFiles", files[i]);
+        for (const item of files) {
+            formData.append("recordFiles", item);
         }
 
-        for (let x = 0; x < teacherIds.length; x++){
-            formData.append("teachers", teacherIds[x]);
+        for (const item of teacherIds) {
+            formData.append("teachers", item);
         }
 
-        dispatch(actions.createDefense(formData,
-            () => navigate('/'),
+        dispatch(actions.createDefense(projectId, formData,
+            () => navigate(`/defenses/defenseDetails/${projectId}`),
             errors => setBackendErrors(errors)
         ))
 
     }
-
 
     return(
         <div className="container w-50">
@@ -140,7 +143,6 @@ const CreateDefense = () => {
                                        accept="image/png, image/jpeg, text/plain, application/pdf, application/msword, application/vnd.ms-excel"
                                        multiple onChange={e => fileUpload(e)}/>
                             </label>
-
                         </div>
                         {files !== null &&
                             <div className="list-group">
@@ -161,7 +163,7 @@ const CreateDefense = () => {
                         <div className="form-group row">
                             <div className="offset-md-7 col-md-5">
                                 <button type="submit" className="btn btn-primary">
-                                    <FormattedMessage id="project.projects.form.submit"/>
+                                    <FormattedMessage id="project.defenses.form.submit"/>
                                 </button>
                             </div>
                         </div>

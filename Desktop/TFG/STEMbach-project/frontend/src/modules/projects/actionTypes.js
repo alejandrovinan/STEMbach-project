@@ -14,3 +14,4 @@ export const FIND_PROJECT_INSTANCES_SUMMARY_COMPLETED= "/project/projects/findPr
 export const CLEAR_PROJECT_INSTANCES_SUMMARY_COMPLETED= "/project/projects/clearProjectInstancesSummaryCompleted";
 export const FIND_PROJECT_INSTANCE_DETAILS_COMPLETED= "/project/projects/findProjectInstanceDetailsCompleted";
 export const EDIT_PROJECT_INSTANCE_COMPLETED="/project/projects/editProjectInstanceCompleted";
+export const CREATED_DATA_COMPLETED= "project/projects/createdDataCompleted";

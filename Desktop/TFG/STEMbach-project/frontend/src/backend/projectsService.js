@@ -77,3 +77,8 @@ export const editProjectInstance = (id, title, description, observations, modali
         config('POST', {id, title, description, observations, modality, url, offerZone, bienniumId, teacherIds, students, studentGroup}),
         onSuccess, onErrors);
 
+export const createFacultyOrSchool = (type, name ,location, onSuccess, onErrors) =>{
+    let path = `/projects/createSchool_Faculty?type=${type}&name=${name}&location=${location}`;
+    appFetch(path, config('POST'), onSuccess ,onErrors);
+}
+

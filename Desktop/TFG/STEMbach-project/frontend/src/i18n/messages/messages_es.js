@@ -85,7 +85,7 @@ export default {
     'project.projects.projectDetails.reviseButton': 'Aprobar proyecto',
     'project.projects.projectDetails.editButton': 'Editar proyecto',
     'project.projects.projectDetails.dropProject': 'Cancelar proyecto',
-    'project.projects.projectDetails.requestProject': 'Solicitar project',
+    'project.projects.projectDetails.requestProject': 'Solicitar proyecto',
     'project.projects.projectDetails.approvalModal.text': 'Dese aprobar este proyecto?',
     'project.projects.projectDetails.dropModal.text': 'Desea dar de baja este proyecto?',
     'project.projects.projectDetails.confirmEditButton': 'Guardar',
@@ -115,5 +115,16 @@ export default {
     'project.defenses.CreateDefense.form.mark': 'Nota',
     'project.defenses.CreateDefense.form.place': 'Lugar',
     'project.defenses.CreateDefense.form.observations': 'Observaciones',
-    'project.defenses.CreateDefense.form.judges': 'Jueces'
+    'project.defenses.CreateDefense.form.judges': 'Jueces',
+
+    'project.defenses.title': 'Defensa',
+    'project.defenseDetails.title': 'Datos de la defensa',
+    'project.defenses.filesToDelete': 'Ficheros que serán eliminados',
+    'project.defenses.form.submit': 'Crear defensa',
+
+    'project.projects.createDBdata.title': 'Creacion de data para DB',
+    'project.projects.DBDataForm.select.placeholder': 'Seleccione tipo de dato a añadir',
+    'project.projects.DBDataForm.select.label': 'Tipo',
+    'project.projects.DBDataForm.location.label': 'Localización',
+    'project.projects.DBDataForm.submit': 'Crear data'
 }

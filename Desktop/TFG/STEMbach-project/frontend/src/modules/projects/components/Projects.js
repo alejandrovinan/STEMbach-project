@@ -44,7 +44,7 @@ const Projects = ({projectResults, bienniums}) => {
                             <td>
                                 {project.modality === "PRESENCIAL" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson"/>}
                                 {project.modality === "DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.distance"/>}
-                                {project.modality === "PRESENCIAL-DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/>}
+                                {project.modality === "PRESENCIAL_DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/>}
                             </td>
                             <td>
                                 {project.offerZone === "COR" && <FormattedMessage id="project.projects.form.offerZoneSelector.cor"/>}

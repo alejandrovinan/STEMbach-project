@@ -115,7 +115,10 @@ export default {
     'project.defenses.CreateDefense.form.mark': 'Mark',
     'project.defenses.CreateDefense.form.place': 'Place',
     'project.defenses.CreateDefense.form.observations': 'Observations',
-    'project.defenses.CreateDefense.form.judges': 'Judges'
+    'project.defenses.CreateDefense.form.judges': 'Judges',
+
+    'project.defenses.title': 'Defense',
+    'project.defenseDetails.title': 'Defense details'
 
 
 

@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
     app: app.reducer,
     users: users.reducer,
     projects: projects.reducer,
-    defenses: projects.reducer
+    defenses: defenses.reducer
 });
 
 export default rootReducer;

@@ -192,3 +192,14 @@ export const editProjectInstance = (id, title, description, observations, modali
         },
         onErrors);
 }
+
+const createDataCompleted = () => ({
+    type: actionTypes.CREATED_DATA_COMPLETED
+})
+
+export const createFacultyOrSchool = (type, name ,location, onSuccess, onError) => dispatch =>
+    backend.projectsService.createFacultyOrSchool(type, name, location,
+        () => {
+        dispatch(createDataCompleted());
+        onSuccess();
+        }, onError);

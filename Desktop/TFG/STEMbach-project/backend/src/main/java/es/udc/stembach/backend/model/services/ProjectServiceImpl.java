@@ -50,6 +50,9 @@ public class ProjectServiceImpl implements ProjectService{
     @Autowired
     CenterHistoryDao centerHistoryDao;
 
+    @Autowired
+    FacultyDao facultyDao;
+
     @Override
     public Project createProject(Project project, List<Long> udcTeacherIdList, Long bienniumId, Long creatorId) throws InstanceNotFoundException {
 
@@ -135,10 +138,13 @@ public class ProjectServiceImpl implements ProjectService{
     @Transactional(readOnly = true)
     public Block<Project> findProjectsByCriteria(Project.Modality modality, Project.OfferZone offerZone, Boolean revised,
                                                  Boolean active, Integer maxGroups, Integer studentsPerGroup,
-                                                 String biennium, Boolean assigned, List<Long> teachers, String title, int size, int page) {
-
+                                                 Long biennium, Boolean assigned, List<Long> teachers, String title, int size, int page) {
+        Optional<Biennium> bienniumAux = null;
+        if(biennium != null) {
+            bienniumAux = bienniumDao.findById(biennium);
+        }
         Slice<Project> projects = projectDao.findProjectListWithFilters(modality, offerZone, revised, active, maxGroups,
-                                                                       studentsPerGroup, biennium, assigned, teachers, title, size, page);
+                                                                       studentsPerGroup, bienniumAux != null ? bienniumAux.get() : null, assigned, teachers, title, size, page);
 
         return new Block<>(projects.getContent(), projects.hasNext());
     }
@@ -203,10 +209,12 @@ public class ProjectServiceImpl implements ProjectService{
             if(!udcTeacherIdList.contains(l.getUdcTeacher().getId())){
                 leadsProjectDao.delete(l);
             } else {
+                //Lista de profesores que se mantienen en el proyecto
                 oldUDCTeacherListId.add(l.getUdcTeacher().getId());
             }
         }
-
+        //Recorremos la lista de IDs y si no se encuentra en la lista de profesores que se mantienen
+        //se guarda la entrada en la BD y se añaden a la lista
         for(Long id: udcTeacherIdList){
             if(!oldUDCTeacherListId.contains(id)){
                 Optional<UDCTeacher> udcTeacherTemp = udcTeacherDao.findById(id);
@@ -290,6 +298,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Block<Request> getAllProjectRequests(Long projectId, int page, int size) {
 
         boolean existMore = false;
@@ -304,13 +313,16 @@ public class ProjectServiceImpl implements ProjectService{
         Iterable<Project> projects = projectDao.findAllByRevisedIsTrueAndActiveIsTrueAndAssignedIsFalse();
         List<Request> projectRequests = new ArrayList<>();
         List<LeadsProject> leadsProjects = new ArrayList<>();
+
         Request request = null;
         int randomNumber = 0;
+        int i = 0;
         ProjectInstance projectInstance = null;
 
         for(Project p: projects){
             projectRequests = requestDao.findAllByProjectId(p.getId());
-            for(int i = 0; (i < p.getMaxGroups() && i < projectRequests.size()); i++){
+            i = 0;
+            while(i < p.getMaxGroups() && i < projectRequests.size()){
                 randomNumber = rand.nextInt(projectRequests.size());
                 request = projectRequests.get(randomNumber);
 
@@ -319,27 +331,28 @@ public class ProjectServiceImpl implements ProjectService{
                     request = projectRequests.get(rand.nextInt(projectRequests.size()));
                 }
 
-            }
+                if(projectRequests.size() != 0){
+                    request.getStudentGroup().setHasProject(true);
+                    request.setStatus(Request.requestStatus.ASSIGNED);
+                    projectInstance = projectInstanceDao.save(
+                            new ProjectInstance(p.getTitle(), p.getDescription(), p.getObservations(), p.getModality(),
+                                    p.getUrl(), p.getOfferZone(), p.getActive(), p.getBiennium(), p.getCreatedBy(), request.getStudentGroup())
+                    );
 
-            if(projectRequests.size() != 0){
-                request.getStudentGroup().setHasProject(true);
-                request.setStatus(Request.requestStatus.ASSIGNED);
-                projectInstance = projectInstanceDao.save(
-                        new ProjectInstance(p.getTitle(), p.getDescription(), p.getObservations(), p.getModality(),
-                                p.getUrl(), p.getOfferZone(), p.getActive(), p.getBiennium(), p.getCreatedBy(), request.getStudentGroup())
-                );
+                    leadsProjects = leadsProjectDao.findAllByProjectId(p.getId());
+                    for(LeadsProject l: leadsProjects){
+                        leadsProjectInstanceDao.save(new LeadsProjectInstance(projectInstance, l.getUdcTeacher()));
+                    }
 
-                leadsProjects = leadsProjectDao.findAllByProjectId(p.getId());
-                for(LeadsProject l: leadsProjects){
-                    leadsProjectInstanceDao.save(new LeadsProjectInstance(projectInstance, l.getUdcTeacher()));
+                    p.setAssigned(true);
                 }
-
-                p.setAssigned(true);
+                i++;
             }
         }
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Block<ProjectInstance> findProjectsInstances(Long id, User.RoleType roleType, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
@@ -354,6 +367,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectInstance findProjectInstanceDetails(Long projectInstanceId) throws InstanceNotFoundException {
 
         Optional<ProjectInstance> projectInstance = projectInstanceDao.findById(projectInstanceId);
@@ -372,6 +386,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CenterSTEMCoordinator findCoordinatorOfSchool(Long schoolId) throws InstanceNotFoundException {
         Optional<CenterHistory> centerHistory = centerHistoryDao.findBySchoolIdAndEndDateIsNull(schoolId);
 
@@ -457,6 +472,30 @@ public class ProjectServiceImpl implements ProjectService{
         }
 
         return projectInstance.get();
+    }
+
+    @Override
+    public Object createFacultyOrSchool(int type, String name, String location) throws DuplicateInstanceException {
+
+        switch (type) {
+            case 0:
+                if(name != null && name.length() > 0){
+                    if(facultyDao.findByName(name).isPresent()){
+                        throw new DuplicateInstanceException("project.entities.faculty", name);
+                    }
+                    return facultyDao.save(new Faculty(name));
+                }
+            case 1:
+                if(name != null && name.length() > 0 && location != null && location.length() > 0){
+                    if(schoolDao.findByName(name).isPresent()){
+                        throw new DuplicateInstanceException("project.entities.school", name);
+                    }
+                    return schoolDao.save(new School(name, location));
+                }
+
+            default:
+                return null;
+        }
     }
 
 }

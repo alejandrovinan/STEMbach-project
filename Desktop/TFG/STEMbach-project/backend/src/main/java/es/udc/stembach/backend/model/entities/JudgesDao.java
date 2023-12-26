@@ -14,4 +14,6 @@ public interface JudgesDao extends PagingAndSortingRepository<Judges, Long> {
             "WHERE j.defense.id = :defenseId " +
             "ORDER BY u.name, u.surname")
     List<UDCTeacher> findAllTeachersOfDefense(Long defenseId);
+
+    List<Judges> findAllByDefenseId(Long defenseId);
 }

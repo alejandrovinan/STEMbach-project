@@ -5,10 +5,10 @@ import AppGlobalComponents from './AppGlobalComponents';
 import Home from './Home';
 import {Login, SignUp, UpdateProfile, ChangePassword, Logout, Accounts, CreateAccounts} from '../../users';
 import users from '../../users';
-import {CreateProjects, ProjectDetails, ProjectInstanceDetails, ProjectSearch} from "../../projects";
+import {CreateDBDataForm, CreateProjects, ProjectDetails, ProjectInstanceDetails, ProjectSearch} from "../../projects";
 import RequestForm from "../../projects/components/RequestForm";
 import ProjectInstanceSearch from "../../projects/components/ProjectInstanceSearch";
-import {CreateDefense} from "../../defenses";
+import {CreateDefense, DefenseDetails} from "../../defenses";
 
 const Body = () => {
 
@@ -37,8 +37,10 @@ const Body = () => {
                 <Route path="/projects/ProjectSearch" element={<ProjectSearch/>}/>
                 {loggedIn && isCenterStemCoordinator && <Route path="/projects/:id/RequestProject" element={<RequestForm/>}/>}
                 {loggedIn && <Route path="/projects/projectInstanceSearch" element={<ProjectInstanceSearch/>}/>}
-                <Route path="/defenses/createDefense" element={<CreateDefense/>}/>
+                {loggedIn && <Route path="/defenses/createDefense/:id" element={<CreateDefense/>}/>}
                 <Route path="/projects/ProjectInstanceDetails/:id" element={<ProjectInstanceDetails/>}/>
+                <Route path="/defenses/defenseDetails/:id" element={<DefenseDetails/>}/>
+                {loggedIn && isStemCoordinator && <Route path="/projects/createDBDataForm" element={<CreateDBDataForm/>}/>}
             </Routes>
         </div>
 

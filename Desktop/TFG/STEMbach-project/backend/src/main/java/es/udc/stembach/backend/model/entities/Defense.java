@@ -14,6 +14,10 @@ public class Defense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectInstanceId")
+    private ProjectInstance projectInstance;
     private String place;
     private LocalDateTime date;
     private BigDecimal mark;
@@ -22,7 +26,16 @@ public class Defense {
     public Defense() {
     }
 
-    public Defense(String place, LocalDateTime date, BigDecimal mark, String observations) {
+    public Defense(ProjectInstance projectInstance, String place, LocalDateTime date, BigDecimal mark, String observations) {
+        this.projectInstance = projectInstance;
+        this.place = place;
+        this.date = date;
+        this.mark = mark;
+        this.observations = observations;
+    }
+
+    public Defense(Long id, String place, LocalDateTime date, BigDecimal mark, String observations) {
+        this.id = id;
         this.place = place;
         this.date = date;
         this.mark = mark;

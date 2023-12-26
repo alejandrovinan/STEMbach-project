@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 import * as userSelectors from "../../users/selectors";
+import * as defenseActions from "../../defenses/actions";
 
 const ProjectInstanceDetails = () => {
 
@@ -24,6 +25,8 @@ const ProjectInstanceDetails = () => {
     const projectDetails = useSelector(selectors.getProjectInstanceDetails);
     const bienniums = useSelector(selectors.getAllBienniums);
     const teachers = useSelector(selectors.getTeacherSelectorList);
+
+    const [existDefense, setExistDefense] = useState(false);
 
     const [backendErrors, setBackendErrors] = useState(null);
     const [title, setTitle] = useState('');
@@ -62,6 +65,7 @@ const ProjectInstanceDetails = () => {
             if(projectDetails === null || projectDetails.id !== id){
                 dispatch(actions.findProjectInstanceDetails(id))
             }
+
         }
 
         if(!bienniums){
@@ -72,13 +76,22 @@ const ProjectInstanceDetails = () => {
             dispatch(actions.findAllTeachers());
         }
 
+        dispatch(defenseActions.checkIfDefenseExists(projectId,
+            result => {
+            setExistDefense(result)
+                if (result === true){
+                    dispatch(defenseActions.findDefenseDetails(id, errors => setBackendErrors(errors)));
+                }
+        }))
+
     }, [id, dispatch]);
 
     if(!projectDetails){
         return null;
     }
 
-    const enableEditMode = () =>{
+    const enableEditMode = e =>{
+        e.preventDefault();
 
         setEditMode(true);
 
@@ -171,7 +184,8 @@ const ProjectInstanceDetails = () => {
         }
     }
 
-    const generateForm = () => {
+    const generateForm = (e) => {
+        e.preventDefault();
         setNewStudents([...newStudents,
             {
                 name: "",
@@ -184,7 +198,8 @@ const ProjectInstanceDetails = () => {
         ]);
     }
 
-    const removeStudent = () => {
+    const removeStudent = (e) => {
+        e.preventDefault();
         let newStudentsAux = [...newStudents];
         if(newStudents.length > 1){
             newStudentsAux.splice(newStudents.length - 1, 1);
@@ -282,7 +297,7 @@ const ProjectInstanceDetails = () => {
                                                     id="project.projects.form.modalitySelector.inPerson"/></option>
                                                 <option value="DISTANCIA"><FormattedMessage
                                                     id="project.projects.form.modalitySelector.distance"/></option>
-                                                <option value="PRESENCIAL-DISTANCIA"><FormattedMessage
+                                                <option value="PRESENCIAL_DISTANCIA"><FormattedMessage
                                                     id="project.projects.form.modalitySelector.inPerson_distance"/></option>
                                             </select>
                                         </div>
@@ -290,7 +305,7 @@ const ProjectInstanceDetails = () => {
                                         <div>
                                             {projectDetails.modality === "PRESENCIAL" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson"/>}
                                             {projectDetails.modality === "DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.distance"/>}
-                                            {projectDetails.modality === "PRESENCIAL-DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/>}
+                                            {projectDetails.modality === "PRESENCIAL_DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/>}
                                         </div>}
                                 </dd>
                                 <dt>
@@ -377,10 +392,10 @@ const ProjectInstanceDetails = () => {
                                         <div className="d-flex flex-row">
                                             <FormattedMessage id="project.requests.table.students"/>
                                             <div className="align-self-end ml-auto">
-                                                <button className="btn btn-secondary rounded-circle" onClick={() => removeStudent()}>
+                                                <button className="btn btn-secondary rounded-circle" onClick={e => removeStudent(e)}>
                                                     <i className="fa-solid fa-minus"></i>
                                                 </button>
-                                                <button className="btn btn-primary rounded-circle" onClick={() => generateForm()}>
+                                                <button className="btn btn-primary rounded-circle" onClick={e => generateForm(e)}>
                                                     <i className="fa-solid fa-plus"></i>
                                                 </button>
                                             </div>
@@ -452,25 +467,35 @@ const ProjectInstanceDetails = () => {
                         -El usuario es un profesor y al mismo tiempo el creador del proyecto (botón de edición)
                         -El usuario es un coordinador de centro (botón para solicitar el proyecto)
                     */}
-                    {user.id === projectDetails.createdBy || isStemCoordinator}
                     <div className="card-footer">
                         <div className="d-flex flex-row-reverse">
-                            {!editMode ?
-                                <button type="button" className="btn btn-primary btn-md ml-auto" onClick={() => enableEditMode()}>
-                                    <FormattedMessage id="project.projects.projectDetails.editButton"/>
-                                </button> :
-                                <div>
-                                    {/*Botón para confirmar cambios*/}
-                                    <button type="submit" className="btn btn-primary btn-md ml-auto">
-                                        <FormattedMessage id="project.projects.projectDetails.confirmEditButton"/>
-                                    </button>
-                                </div>
-                            }
-                            {/*Botón para cancelar edición*/}
-                            {editMode &&
-                            <button type="button" className="btn btn-secondary btn-md ml-auto" onClick={() => disableEditMode()}>
-                                <FormattedMessage id="project.projects.projectDetails.cancelEditButton"/>
-                            </button>
+                            {(user.id === projectDetails.createdBy || isStemCoordinator || user.id === projectDetails.centerSTEMCoordinator.id) &&
+                            <div>
+                                {!editMode ?
+                                    <div>
+                                        {existDefense === true ?
+                                        <button type="button" className="btn btn-primary btn-md ml-auto m-1" onClick={() => navigate(`/defenses/defenseDetails/${projectId}`)}>
+                                            <FormattedMessage id="project.defenseDetails.title"/>
+                                        </button>:
+                                        <button type="button" className="btn btn-primary btn-md ml-auto m-1" onClick={() => navigate(`/defenses/createDefense/${projectId}`)}>
+                                            <FormattedMessage id="project.defenses.CreateDefense.title"/>
+                                        </button>
+                                        }
+                                        <button type="button" className="btn btn-primary btn-md ml-auto m-1" onClick={e => enableEditMode(e)}>
+                                            <FormattedMessage id="project.projects.projectDetails.editButton"/>
+                                        </button>
+                                    </div>:
+                                    <div>
+                                        {/*Botón para confirmar cambios*/}
+                                        <button type="button" className="btn btn-secondary btn-md ml-auto m-1" onClick={() => disableEditMode()}>
+                                            <FormattedMessage id="project.projects.projectDetails.cancelEditButton"/>
+                                        </button>
+                                        <button type="submit" className="btn btn-primary btn-md ml-auto m-1">
+                                            <FormattedMessage id="project.projects.projectDetails.confirmEditButton"/>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
                             }
                         </div>
                     </div>

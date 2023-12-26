@@ -10,6 +10,7 @@ import es.udc.stembach.backend.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class ProjectController {
     private final static String INSTANCE_NOT_FOUND_CODE= "project.exceptions.InstanceNotFoundException";
     private final static String ALREADY_IN_GROUP_EXCEPTION="project.exceptions.AlreadyInGroupException";
     private final static String MAX_STUDENTS_IN_PROJECT="project.exception.MaxStudentsInProjectException";
+    private final static String DUPLICATE_INSTANCE_EXCEPTION="project.exception.DuplicateInstanceException";
 
     @Autowired
     private MessageSource messageSource;
@@ -67,6 +69,17 @@ public class ProjectController {
     public ErrorsDto handleMaxStudentsInProjectException(MaxStudentsInProjectException e, Locale locale){
         String errorMessage = messageSource.getMessage(MAX_STUDENTS_IN_PROJECT, new Object[] {e.getProjectId(),e.getStudents()},
                 MAX_STUDENTS_IN_PROJECT, locale);
+
+        return new ErrorsDto(errorMessage);
+    }
+
+    @ExceptionHandler(DuplicateInstanceException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorsDto handleDuplicateInstanceException(DuplicateInstanceException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(DUPLICATE_INSTANCE_EXCEPTION, new Object[] {exception.getName(), exception.getKey()},
+                DUPLICATE_INSTANCE_EXCEPTION, locale);
 
         return new ErrorsDto(errorMessage);
     }
@@ -119,7 +132,7 @@ public class ProjectController {
             @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) Integer maxGroups,
             @RequestParam(required = false) Integer studentsPerGroup,
-            @RequestParam(required = false) String biennium,
+            @RequestParam(required = false) Long biennium,
             @RequestParam(required = false) Boolean assigned,
             @RequestParam(required = false) List<Long> teachers,
             @RequestParam(required = false) String title,
@@ -176,8 +189,9 @@ public class ProjectController {
     }
 
     @PostMapping("/asignProjects")
-    public void asignProjects(){
+    public ResponseEntity.BodyBuilder asignProjects(){
         projectService.asignProjects();
+        return ResponseEntity.ok();
     }
 
     @GetMapping("/findProjectsInstancesSummary")
@@ -230,5 +244,13 @@ public class ProjectController {
         projectInstanceDetailsDto.setCenterSTEMCoordinator(toUserDto(projectService.findCoordinatorOfSchool(projectInstance.getStudentGroup().getSchool().getId())));
         projectInstanceDetailsDto.getCenterSTEMCoordinator().setPassword(null);
         return projectInstanceDetailsDto;
+    }
+
+    @PostMapping("/createSchool_Faculty")
+    public Object createFacultyOrSchool(@RequestParam(required = false) int type,
+                                        @RequestParam(required = false) String name,
+                                        @RequestParam(required = false) String location) throws DuplicateInstanceException {
+        Object o = projectService.createFacultyOrSchool(type, name, location);
+        return o;
     }
 }

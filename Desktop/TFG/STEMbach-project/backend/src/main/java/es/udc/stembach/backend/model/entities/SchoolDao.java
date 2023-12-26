@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface SchoolDao extends PagingAndSortingRepository<School, Long> {
 
     Optional<School> findById(Long id);
+    Optional<School> findByName(String name);
 }

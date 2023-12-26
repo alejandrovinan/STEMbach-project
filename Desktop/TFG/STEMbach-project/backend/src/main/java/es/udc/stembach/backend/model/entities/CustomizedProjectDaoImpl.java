@@ -27,7 +27,7 @@ public class CustomizedProjectDaoImpl implements CustomizedProjectDao{
     @SuppressWarnings("unchecked")
     @Override
     public Slice<Project> findProjectListWithFilters(Project.Modality modality, Project.OfferZone offerZone, Boolean revised,
-                                                     Boolean active, Integer maxGroups, Integer studentsPerGroup, String biennium,
+                                                     Boolean active, Integer maxGroups, Integer studentsPerGroup, Biennium biennium,
                                                      Boolean assigned, List<Long> teachers, String title, int size, int page) {
 
         String[] tokens = getTokens(title);
@@ -48,7 +48,7 @@ public class CustomizedProjectDaoImpl implements CustomizedProjectDao{
         }
 
         if(maxGroups != null && maxGroups > 0){
-            queryString += "AND p.maxGroups <= :maxGroups ";
+            queryString += "AND p.maxGroups >= :maxGroups ";
         }
 
         if(studentsPerGroup != null && studentsPerGroup > 0){
@@ -74,17 +74,19 @@ public class CustomizedProjectDaoImpl implements CustomizedProjectDao{
 
         }
 
+        queryString += "GROUP BY p.id";
+
         Query query = entityManager.createQuery(queryString).setFirstResult(page*size).setMaxResults(size+1);
         query.setParameter("revised", revised);
         query.setParameter("active", active);
         query.setParameter("assigned", assigned);
 
         if (modality != null) {
-            query.setParameter("modality", modality.toString());
+            query.setParameter("modality", modality);
         }
 
         if(offerZone != null){
-            query.setParameter("offerZone", offerZone.toString());
+            query.setParameter("offerZone", offerZone);
         }
 
         if(maxGroups != null && maxGroups > 0){

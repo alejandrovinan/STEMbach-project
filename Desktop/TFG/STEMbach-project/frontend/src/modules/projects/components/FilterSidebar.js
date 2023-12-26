@@ -124,7 +124,7 @@ const FilterSidebar = () => {
                                 <option disabled={true} value=""><FormattedMessage id="project.projects.form.modalitySelector.void"/></option>
                                 <option value="PRESENCIAL"><FormattedMessage id="project.projects.form.modalitySelector.inPerson"/></option>
                                 <option value="DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.distance"/></option>
-                                <option value="PRESENCIAL-DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/></option>
+                                <option value="PRESENCIAL_DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/></option>
                             </select>
                         </CDBSidebarMenuItem>
                         <br/>

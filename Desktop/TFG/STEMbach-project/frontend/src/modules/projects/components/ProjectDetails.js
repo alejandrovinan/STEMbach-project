@@ -147,11 +147,13 @@ const ProjectDetails = () => {
         setIsValidSelector(true);
         setTeachersSelectorHolder(selectedOptions);
         setTeacherIds([]);
-        selectedOptions.forEach(o => {setTeacherIds(teacherIds.concat(o.value))})
+        let idsAux = selectedOptions.map(o => {return o.value});
+        setTeacherIds(idsAux);
 
         if(selectedOptions.length === 0){
             setIsValidSelector(false);
         }
+        console.log(teacherIds);
     }
 
 
@@ -227,7 +229,7 @@ const ProjectDetails = () => {
                                                 id="project.projects.form.modalitySelector.inPerson"/></option>
                                             <option value="DISTANCIA"><FormattedMessage
                                                 id="project.projects.form.modalitySelector.distance"/></option>
-                                            <option value="PRESENCIAL-DISTANCIA"><FormattedMessage
+                                            <option value="PRESENCIAL_DISTANCIA"><FormattedMessage
                                                 id="project.projects.form.modalitySelector.inPerson_distance"/></option>
                                         </select>
                                     </div>
@@ -235,7 +237,7 @@ const ProjectDetails = () => {
                                     <div>
                                         {projectDetails.modality === "PRESENCIAL" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson"/>}
                                         {projectDetails.modality === "DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.distance"/>}
-                                        {projectDetails.modality === "PRESENCIAL-DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/>}
+                                        {projectDetails.modality === "PRESENCIAL_DISTANCIA" && <FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/>}
                                     </div>}
                             </dd>
                                 <dt>

@@ -14,11 +14,12 @@ INSERT INTO udcteacher (NAME, SURNAME, SECONDSURNAME,ROLE, EMAIL, DNI, PASSWORD,
 INSERT INTO centerstemcoordinator (name, surname, secondSurname, role, email, password)
     VALUES ('Pepe', 'López', 'López', 2, 'pepe.lope@gmail.es','$2a$12$4B/HSnp2qrIhxlT2Zng6Cul8E2M5cxE/JNMv6vwwJQwGI7S3o.nAu');
 
+INSERT INTO school (name, location)
+VALUES ('Manuel Murguía', 'Arteixo, Acoruña');
+
 INSERT INTO centerhistory(CENTERSTEMCOORDINATORID, SCHOOLID, STARTDATE, ENDDATE)
     VALUES (1, 1, CAST('2022/02/10T15:30:30' AS DateTime), null);
 
-INSERT INTO school (name, location)
-    VALUES ('Manuel Murguía', 'Arteixo, Acoruña');
 
 INSERT INTO biennium (dateRange)
     VALUES ('2021-2023');

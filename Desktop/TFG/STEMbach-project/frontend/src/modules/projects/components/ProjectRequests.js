@@ -14,15 +14,11 @@ const ProjectRequests = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(requests){
-            dispatch(actions.viewRequests(requests.criteria))
-        } else {
             dispatch(actions.viewRequests({
                 id: projectDetails.id,
                 page: 0,
                 size: 5
             }))
-        }
     }, [dispatch])
 
     if(requests){

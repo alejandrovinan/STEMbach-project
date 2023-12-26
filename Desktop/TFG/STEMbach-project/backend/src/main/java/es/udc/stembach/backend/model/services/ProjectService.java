@@ -19,7 +19,7 @@ public interface ProjectService {
     public Block<Project> findAllProjects(int page, int size);
 
     public Block<Project> findProjectsByCriteria(Project.Modality modality, Project.OfferZone offerZone, Boolean revised,
-                                                 Boolean active, Integer maxGroups, Integer studentsPerGroup, String biennium,
+                                                 Boolean active, Integer maxGroups, Integer studentsPerGroup, Long biennium,
                                                  Boolean assigned, List<Long> teachers, String title, int size, int page);
 
     public void approveProject(Long projectId) throws InstanceNotFoundException;
@@ -43,4 +43,6 @@ public interface ProjectService {
     public CenterSTEMCoordinator findCoordinatorOfSchool(Long schoolId) throws InstanceNotFoundException;
 
     public ProjectInstance editProjectInstance(ProjectInstance project, List<Long> udcTeacherIdList, List<Student> students, Long bienniumId) throws InstanceNotFoundException, EmptyStudentForProjectException;
+
+    Object createFacultyOrSchool(int type, String name, String location) throws DuplicateInstanceException;
 }

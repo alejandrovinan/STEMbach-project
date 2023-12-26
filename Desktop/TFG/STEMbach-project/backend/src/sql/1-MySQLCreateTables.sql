@@ -1,17 +1,20 @@
-DROP TABLE LeadsProject;
-DROP TABLE Request;
-DROP TABLE Project;
-DROP TABLE LeadsProjectInstance;
-DROP TABLE ProjectInstance;
-DROP TABLE UDCTeacher;
-DROP TABLE STEMCoordinator;
-DROP TABLE Faculty;
-DROP TABLE CenterHistory;
-DROP TABLE Student;
-DROP TABLE StudentGroup;
-DROP TABLE School;
-DROP TABLE CenterSTEMCoordinator;
-DROP TABLE Biennium;
+DROP TABLE IF EXISTS LeadsProject;
+DROP TABLE IF EXISTS Request;
+DROP TABLE IF EXISTS Project;
+DROP TABLE IF EXISTS RecordFile;
+DROP TABLE IF EXISTS Judges;
+DROP TABLE IF EXISTS Defense;
+DROP TABLE IF EXISTS LeadsProjectInstance;
+DROP TABLE IF EXISTS ProjectInstance;
+DROP TABLE IF EXISTS UDCTeacher;
+DROP TABLE IF EXISTS STEMCoordinator;
+DROP TABLE IF EXISTS Faculty;
+DROP TABLE IF EXISTS CenterHistory;
+DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS StudentGroup;
+DROP TABLE IF EXISTS School;
+DROP TABLE IF EXISTS CenterSTEMCoordinator;
+DROP TABLE IF EXISTS Biennium;
 
 CREATE TABLE Faculty (
     id BIGINT NOT NULL AUTO_INCREMENT,
@@ -200,11 +203,14 @@ CREATE TABLE LeadsProjectInstance (
 
 CREATE TABLE Defense (
      id BIGINT NOT NULL AUTO_INCREMENT,
+     projectInstanceId BIGINT NOT NULL,
      place VARCHAR(300),
      date DATETIME NOT NULL,
      mark DECIMAL(11, 2),
      observations VARCHAR(500),
-     CONSTRAINT DefensePK PRIMARY KEY (id)
+     CONSTRAINT DefensePK PRIMARY KEY (id),
+     CONSTRAINT DefenseProjectInstanceFK FOREIGN KEY (projectInstanceId)
+                     REFERENCES ProjectInstance (id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE RecordFile (

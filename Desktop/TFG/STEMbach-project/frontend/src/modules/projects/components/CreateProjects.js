@@ -142,7 +142,7 @@ const CreateProjects = () => {
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label htmlFor="modality" className="col-md-3 col-form-label">
+                             <label htmlFor="modality" className="col-md-3 col-form-label">
                                 <FormattedMessage id="project.projects.form.modality"/>
                             </label>
                             <div className="col-md-7">
@@ -150,7 +150,7 @@ const CreateProjects = () => {
                                     <option disabled={true} value=""><FormattedMessage id="project.projects.form.modalitySelector.void"/></option>
                                     <option value="PRESENCIAL"><FormattedMessage id="project.projects.form.modalitySelector.inPerson"/></option>
                                     <option value="DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.distance"/></option>
-                                    <option value="PRESENCIAL-DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/></option>
+                                    <option value="PRESENCIAL_DISTANCIA"><FormattedMessage id="project.projects.form.modalitySelector.inPerson_distance"/></option>
                                 </select>
                                 <div className="invalid-feedback">
                                     <FormattedMessage id='project.global.validator.required'/>

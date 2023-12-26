@@ -8,4 +8,5 @@ public interface UDCTeacherDao extends PagingAndSortingRepository<UDCTeacher, Lo
     boolean existsByEmail(String email);
 
     Optional<UDCTeacher> findByEmail(String email);
+
 }

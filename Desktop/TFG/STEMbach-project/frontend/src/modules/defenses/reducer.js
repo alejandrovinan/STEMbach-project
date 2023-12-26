@@ -12,6 +12,12 @@ const defense = (state = initialState.defense, action) => {
         case actionTypes.CREATE_DEFENSE_COMPLETED:
             return action.defense;
 
+        case actionTypes.FIND_DEFENSE_DETAILS_COMPLETED:
+            return action.defense;
+
+        case actionTypes.UPDATE_DEFENSE_COMPLETED:
+            return action.defense;
+
         default:
             return state;
     }

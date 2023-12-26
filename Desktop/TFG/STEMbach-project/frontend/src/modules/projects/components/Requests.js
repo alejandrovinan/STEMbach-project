@@ -27,7 +27,7 @@ const Requests = ({requests}) =>{
                     </thead>
                     <tbody>
                     {requests.map(request =>
-                        <tr key={request.id}>
+                        <tr key={request.id} className={request.status === "ASSIGNED" ? "table-success" : "" }>
                             <td className="text-center align-middle">
                                 {request.status}
                             </td>
